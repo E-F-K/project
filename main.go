@@ -76,3 +76,17 @@ func main() {
 	printALLTasksFromList(context.Background(), inputListID)
 
 }
+
+/*
+const (
+	value1 = 1
+	value2 = 2
+	value3 = 3
+)
+
+func main() {
+	fmt.Println(value1)
+	fmt.Println(value2)
+	fmt.Println(value3)
+}
+*/

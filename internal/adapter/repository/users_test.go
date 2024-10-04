@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestBasicOperations(t *testing.T) {
+func TestBasicUserOperations(t *testing.T) {
 	ctx := context.Background()
 
 	repo := repository.NewUsers()
