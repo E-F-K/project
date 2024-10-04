@@ -42,7 +42,7 @@ func TestBasicTasksOperations(t *testing.T) {
 		task := domain.Task{
 			ID:        domain.TaskID(uuid.New()),
 			ListID:    domain.ListID(listuuid),
-			Priority:  domain.High,
+			Priority:  domain.Low,
 			Deadline:  domain.Timestamp(time.Now()),
 			Done:      false,
 			Name:      "task name",
