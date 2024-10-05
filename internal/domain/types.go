@@ -74,18 +74,18 @@ func (t *Timestamp) Value() (driver.Value, error) {
 var _ driver.Valuer = (*Timestamp)(nil)
 var _ sql.Scanner = (*Timestamp)(nil)
 
-type Priority int
+type Priority string
 
 const (
-	Low Priority = iota + 1
-	Medium
-	High
+	Low    Priority = "low"
+	Normal Priority = "normal"
+	High   Priority = "high"
 )
 
 func (t *Priority) Scan(src any) error {
-	v, ok := src.(int)
+	v, ok := src.(string)
 	if !ok {
-		return errors.New("database value is not int")
+		return errors.New("database value is not string")
 	}
 
 	*t = Priority(v)
@@ -95,7 +95,7 @@ func (t *Priority) Scan(src any) error {
 
 // Value implements driver.Valuer.
 func (t *Priority) Value() (driver.Value, error) {
-	return int(*t), nil
+	return string(*t), nil
 }
 
 var _ driver.Valuer = (*Priority)(nil)
