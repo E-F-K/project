@@ -2,91 +2,51 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"log/slog"
 	"os"
+	"todo_list/internal/adapter/controller"
+	"todo_list/internal/adapter/database"
+	"todo_list/internal/adapter/logger"
+	"todo_list/internal/adapter/repository"
+	"todo_list/internal/domain"
 
-	"github.com/jackc/pgx/v5"
-)
-
-func provideConnection(ctx context.Context, receiver func(context.Context, *pgx.Conn) error) error {
-	conn, err := pgx.Connect(ctx, "postgres://postgres:password@localhost:5432/postgres")
-	if err != nil {
-		return err
-	}
-	defer conn.Close(ctx)
-
-	return receiver(ctx, conn)
-}
-
-func printUserName(ctx context.Context, userID string) {
-	var name string
-	err := provideConnection(ctx, func(ctx context.Context, conn *pgx.Conn) error {
-		return conn.QueryRow(context.Background(), "select name from users where id=$1", userID).Scan(&name)
-	})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println(name)
-}
-
-func printTaskByID(ctx context.Context, taskID string) {
-	var task string
-	err := provideConnection(ctx, func(ctx context.Context, conn *pgx.Conn) error {
-		return conn.QueryRow(context.Background(), "select name from tasks where id=$1", taskID).Scan(&task)
-	})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println(task)
-}
-
-func printALLTasksFromList(ctx context.Context, listID string) {
-	var tasks string
-	err := provideConnection(ctx, func(ctx context.Context, conn *pgx.Conn) error {
-		return conn.QueryRow(context.Background(), "select name from tasks where list_id=$1", listID).Scan(&tasks)
-	})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
-	fmt.Println(tasks)
-}
-
-func main() {
-	// urlExample := os.Getenv("DATABASE_URL")
-	conn, err := pgx.Connect(context.Background(), "postgres://postgres:password@localhost:5432/postgres")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	defer conn.Close(context.Background())
-
-	var inputUserID string
-	inputUserID = "00000000-0000-0000-0000-000000000001"
-	printUserName(context.Background(), inputUserID)
-
-	var inputTaskID string
-	inputTaskID = "20000000-0000-0000-0000-000000000002"
-	printTaskByID(context.Background(), inputTaskID)
-
-	var inputListID string
-	inputListID = "10000000-0000-0000-0000-000000000001"
-	printALLTasksFromList(context.Background(), inputListID)
-
-}
-
-/*
-const (
-	value1 = 1
-	value2 = 2
-	value3 = 3
+	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func main() {
-	fmt.Println(value1)
-	fmt.Println(value2)
-	fmt.Println(value3)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	user, toDo, err := createControllers()
+	if err != nil {
+		slog.ErrorContext(ctx, "Create application service failed.", logger.ErrAttr(err))
+		os.Exit(1)
+	}
+	defer func() { _ = user.Close() }()
+	defer func() { _ = toDo.Close() }()
+
+	router := gin.Default()
+	router.POST("register", user.Register)
+	router.POST("login", user.Login)
+
+	authRequired := router.Group("/v1")
+	authRequired.Use(controller.TokenAuthMiddleware())
+	{
+		authRequired.GET("lists", toDo.GetUserLists)
+	}
+
+	router.Run(":8080")
 }
-*/
+
+func createControllers() (*controller.Users, *controller.ToDo, error) {
+	pool, err := pgxpool.New(context.Background(), domain.ConnectionString)
+	if err != nil {
+		return nil, nil, errors.Join(errors.New("create database pool failed"), err)
+	}
+
+	appService := domain.NewToDoService(database.NewPostgresProvider(pool), repository.NewUsers())
+
+	return controller.NewUsers(appService), controller.NewToDo(), nil
+}

@@ -15,12 +15,16 @@ func TestBasicUserOperations(t *testing.T) {
 	ctx := context.Background()
 
 	repo := repository.NewUsers()
-	cleanTablesAndCreateProvider(ctx, t).ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
+	provider := cleanTablesAndCreateProvider(ctx, t)
+	defer func() { _ = provider.Close() }()
+
+	provider.ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
 		user := domain.User{
-			ID:    domain.UserID(uuid.New()),
-			Name:  "user name",
-			Email: "user@email.foo",
-			Token: "some secret token",
+			ID:           domain.UserID(uuid.New()),
+			Name:         "user name",
+			Email:        "user@email.foo",
+			PasswordHash: "some password hash",
+			Token:        "some secret token",
 		}
 		require.NoError(t, repo.Create(ctx, connection, user))
 

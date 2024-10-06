@@ -1,0 +1,9 @@
+dir: mocks/{{ replaceAll .PackagePath "internal" "src" }}
+packages:
+  todo_list/internal/domain:
+    config:
+      all: true
+      disable-version-string: true
+      recursive: true
+      with-expecter: true
+

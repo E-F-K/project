@@ -17,13 +17,16 @@ func TestBasicListsOperations(t *testing.T) {
 
 	repoList := repository.NewLists()
 	repo := repository.NewUsers()
-	cleanTablesAndCreateProvider(ctx, t).ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
+	provider := cleanTablesAndCreateProvider(ctx, t)
+	defer func(){_ = provider.Close()}()
+
+	provider.ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
 		myuuid := uuid.New()
 		user := domain.User{
-			ID:    domain.UserID(myuuid),
-			Name:  "user name",
-			Email: "user@email.foo",
-			Token: "some secret token",
+			ID:           domain.UserID(myuuid),
+			Name:         "user name",
+			Email:        "user@email.foo",
+			PasswordHash: "some password hash",
 		}
 		require.NoError(t, repo.Create(ctx, connection, user))
 
