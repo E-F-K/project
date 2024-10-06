@@ -33,6 +33,15 @@ type (
 	}
 )
 
+func (p *PostgresProvider) Close() error {
+	p.pool.Close()
+	p.pool = nil
+	p.connFactory = nil
+	p.txFactory = nil
+
+	return nil
+}
+
 func NewPostgresProvider(pool *pgxpool.Pool, options ...PostgresProviderOption) *PostgresProvider {
 	provider := &PostgresProvider{
 		pool:        pool,

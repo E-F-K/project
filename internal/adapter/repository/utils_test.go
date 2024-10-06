@@ -12,10 +12,9 @@ import (
 )
 
 func cleanTablesAndCreateProvider(ctx context.Context, t *testing.T) domain.ConnectionProvider {
-	const connString = "postgres://postgres:password@localhost:5432/postgres"
 	tablesToClean := []string{"users", "lists", "tasks"}
 
-	pool, err := pgxpool.New(context.Background(), connString)
+	pool, err := pgxpool.New(context.Background(), domain.ConnectionString)
 	require.NoError(t, err)
 
 	provider := database.NewPostgresProvider(pool)

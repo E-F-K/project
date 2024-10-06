@@ -2,8 +2,10 @@ create table if not exists users (
     id UUID PRIMARY KEY,
     name TEXT not null,
     email TEXT not null,
-    token TEXT null,
-    updated_at timestamp with time zone
+    password_hash TEXT not null,
+    token TEXT not null,
+    updated_at timestamp with time zone,
+    unique(email)
 );
 
 create table if not exists lists (

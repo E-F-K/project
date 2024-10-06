@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"errors"
+	"io"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,10 +15,11 @@ type (
 	UserID uuid.UUID
 
 	User struct {
-		ID    UserID
-		Name  string
-		Email string
-		Token string
+		ID           UserID
+		Name         string
+		Email        string
+		PasswordHash string
+		Token        string
 	}
 
 	ListID    uuid.UUID
@@ -51,6 +53,13 @@ type (
 	ConnectionProvider interface {
 		Execute(context.Context, func(context.Context, Connection) error) error
 		ExecuteTx(context.Context, func(context.Context, Connection) error) error
+		io.Closer
+	}
+
+	UserService interface {
+		RegisterUser(ctx context.Context, name, email, passwordHash, token string) error
+		Authenticate(ctx context.Context, token string) (User, error)
+		io.Closer
 	}
 )
 
