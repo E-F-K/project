@@ -5,13 +5,17 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var _ UserService = (*ToDoService)(nil)
 
 var (
-	errToDoService             = errors.New("service error")
-	ErrToDoServiceRegisterUser = errors.Join(errToDoService, errors.New("register user failed"))
+	errToDoService                    = errors.New("service error")
+	ErrToDoServiceRegisterUser        = errors.Join(errToDoService, errors.New("register user failed"))
+	ErrToDoServiceLoginUser           = errors.Join(errToDoService, errors.New("login user failed"))
+	ErrToDoServiceInvalidPasswordUser = errors.Join(ErrToDoServiceLoginUser, errors.New("invalid password email"))
+	ErrToDoServiceUpdateToken         = errors.Join(errToDoService, errors.New("update token failed"))
 )
 
 type ToDoService struct {
@@ -42,11 +46,42 @@ func (s *ToDoService) RegisterUser(ctx context.Context, name string, email strin
 
 		return s.userRepo.Create(ctx, connection, user)
 	})
-	if err !=nil {
+	if err != nil {
 		return errors.Join(ErrToDoServiceRegisterUser, err)
 	}
 
 	return nil
+}
+
+func (s *ToDoService) Login(ctx context.Context, email string, password string) error {
+	var user User
+	err := s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
+		var err error
+		user, err = s.userRepo.ReadByEmail(ctx, connection, email)
+
+		return err
+	})
+	if err != nil {
+		return errors.Join(ErrToDoServiceLoginUser, err)
+	}
+
+	if err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
+		return errors.Join(ErrToDoServiceInvalidPasswordUser, err)
+	}
+
+	return nil
+}
+
+func (s *ToDoService) UpdateToken(ctx context.Context, email string, token string) error {
+	err := s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
+		return s.userRepo.UpdateTokenByEmail(ctx, connection, email, token)
+	})
+	if err != nil {
+		return errors.Join(ErrToDoServiceUpdateToken, err)
+	}
+
+	return nil
+
 }
 
 func (s *ToDoService) Close() error {

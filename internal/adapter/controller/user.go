@@ -113,7 +113,60 @@ func (ctl *Users) Register(c *gin.Context) {
 }
 
 func (ctl *Users) Login(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, errorResponse("Not yet implemented."))
+	ctx := c.Request.Context()
+
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		slog.ErrorContext(ctx, "Read request body failed.", logger.ErrAttr(err))
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("Read body failed."))
+
+		return
+	}
+
+	type messageType struct {
+		Email    string
+		Password string
+	}
+	var message messageType
+	if err = json.Unmarshal(body, &message); err != nil {
+		slog.ErrorContext(ctx, "Parse request body failed.", logger.ErrAttr(err))
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("Parse body failed."))
+
+		return
+	}
+
+	err = ctl.service.Login(ctx, message.Email, message.Password)
+	if err != nil {
+		slog.ErrorContext(ctx, "Login failed.", logger.ErrAttr(err))
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("Login failed."))
+
+		return
+	}
+
+	var token string
+	{
+		token, err = ctl.generateToken()
+		if err != nil {
+			slog.ErrorContext(ctx, "Create token failed.", logger.ErrAttr(err))
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("Create token failed."))
+
+			return
+		}
+	}
+
+	err = ctl.service.UpdateToken(ctx, message.Email, token)
+	if err != nil {
+		slog.ErrorContext(ctx, "Update user token failed.", logger.ErrAttr(err))
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("Update user token failed."))
+
+		return
+	}
+
+	c.JSON(http.StatusOK, struct {
+		Token string `json:"token"`
+	}{
+		Token: token,
+	})
 }
 
 func (ctl *Users) Close() error {

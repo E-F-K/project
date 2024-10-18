@@ -14,6 +14,16 @@ type MockUserService struct {
 	mock.Mock
 }
 
+// Login implements domain.UserService.
+func (_m *MockUserService) Login(ctx context.Context, email string, passwordHash string) error {
+	panic("unimplemented")
+}
+
+// UpdateToken implements domain.UserService.
+func (_m *MockUserService) UpdateToken(ctx context.Context, email string, token string) error {
+	panic("unimplemented")
+}
+
 type MockUserService_Expecter struct {
 	mock *mock.Mock
 }

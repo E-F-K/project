@@ -59,6 +59,9 @@ type (
 	UserService interface {
 		RegisterUser(ctx context.Context, name, email, passwordHash, token string) error
 		Authenticate(ctx context.Context, token string) (User, error)
+		Login(ctx context.Context, email, password string) error
+		UpdateToken(ctx context.Context, email, token string) error
+
 		io.Closer
 	}
 )
