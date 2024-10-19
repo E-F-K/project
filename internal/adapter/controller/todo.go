@@ -2,6 +2,7 @@ package controller
 
 import (
 	"io"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,10 +15,12 @@ func NewToDo() *ToDo {
 	return &ToDo{}
 }
 
-func (c *ToDo) GetUserLists(ctx *gin.Context) {
+func (ctl *ToDo) GetUserLists(c *gin.Context) {
+	curUser := getCurrentUser(c)
 
+	c.JSON(http.StatusOK, curUser)
 }
 
-func (c *ToDo) Close() error {
+func (ctl *ToDo) Close() error {
 	return nil
 }

@@ -19,11 +19,6 @@ var (
 
 type Users struct{}
 
-// UpdateByToken implements domain.UsersRepository.
-func (r *Users) UpdateByToken(context.Context, string, string, string) error {
-	panic("unimplemented")
-}
-
 func NewUsers() *Users {
 	return &Users{}
 }
@@ -54,11 +49,11 @@ func (r Users) Delete(ctx context.Context, connection domain.Connection, userID 
 	return err
 }
 
-func (r Users) Read(ctx context.Context, connection domain.Connection, userID domain.UserID) (domain.User, error) {
-	const query = `select id, name, email, password_hash, token from users where id = $1`
+func (r Users) ReadByToken(ctx context.Context, connection domain.Connection, token string) (domain.User, error) {
+	const query = `select id, name, email, password_hash, token from users where token = $1`
 
 	var user domain.User
-	err := connection.GetContext(ctx, &user, query, userID)
+	err := connection.GetContext(ctx, &user, query, token)
 	if err != nil {
 		err = errors.Join(ErrUsersRead, err)
 	}

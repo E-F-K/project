@@ -19,7 +19,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	user, toDo, err := createControllers()
+	slog.SetLogLoggerLevel(slog.LevelDebug)
+
+	user, toDo, authMiddleware, err := createControllers()
 	if err != nil {
 		slog.ErrorContext(ctx, "Create application service failed.", logger.ErrAttr(err))
 		os.Exit(1)
@@ -32,7 +34,7 @@ func main() {
 	router.POST("login", user.Login)
 
 	authRequired := router.Group("/v1")
-	authRequired.Use(controller.TokenAuthMiddleware())
+	authRequired.Use(authMiddleware)
 	{
 		authRequired.GET("lists", toDo.GetUserLists)
 	}
@@ -40,13 +42,15 @@ func main() {
 	router.Run(":8080")
 }
 
-func createControllers() (*controller.Users, *controller.ToDo, error) {
+func createControllers() (*controller.Users, *controller.ToDo, gin.HandlerFunc, error) {
 	pool, err := pgxpool.New(context.Background(), domain.ConnectionString)
 	if err != nil {
-		return nil, nil, errors.Join(errors.New("create database pool failed"), err)
+		return nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
 	}
 
 	appService := domain.NewToDoService(database.NewPostgresProvider(pool), repository.NewUsers())
 
-	return controller.NewUsers(appService), controller.NewToDo(), nil
+	authMiddlware := controller.NewAuthMiddleware(appService).Auth
+
+	return controller.NewUsers(appService), controller.NewToDo(), authMiddlware, nil
 }
