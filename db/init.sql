@@ -5,7 +5,8 @@ create table if not exists users (
     password_hash TEXT not null,
     token TEXT not null,
     updated_at timestamp with time zone,
-    unique(email)
+    unique(email),
+    unique(token)
 );
 
 create table if not exists lists (

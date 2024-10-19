@@ -31,13 +31,13 @@ func TestBasicUserOperations(t *testing.T) {
 		user.Name = "new user name"
 		require.NoError(t, repo.Update(ctx, connection, user))
 
-		newUser, err := repo.Read(ctx, connection, user.ID)
+		newUser, err := repo.ReadByToken(ctx, connection, user.Token)
 		require.NoError(t, err)
 		require.Equal(t, user.Name, newUser.Name)
 
 		require.NoError(t, repo.Delete(ctx, connection, user.ID))
 
-		_, err = repo.Read(ctx, connection, user.ID)
+		_, err = repo.ReadByToken(ctx, connection, user.Token)
 		require.ErrorIs(t, err, sql.ErrNoRows)
 
 		return nil

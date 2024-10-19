@@ -4,10 +4,10 @@ import "context"
 
 type UsersRepository interface {
 	Create(context.Context, Connection, User) error
-	Read(context.Context, Connection, UserID) (User, error)
+	ReadByToken(context.Context, Connection, string) (User, error)
+	ReadByEmail(context.Context, Connection, string) (User, error)
 	Update(context.Context, Connection, User) error
 	Delete(context.Context, Connection, UserID) error
-	ReadByEmail(context.Context, Connection, string) (User, error)
 	UpdateTokenByEmail(context.Context, Connection, string, string) error
 }
 

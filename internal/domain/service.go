@@ -12,6 +12,7 @@ var _ UserService = (*ToDoService)(nil)
 
 var (
 	errToDoService                    = errors.New("service error")
+	ErrToDoServiceAuthenticate        = errors.Join(errToDoService, errors.New("authenticate user failed"))
 	ErrToDoServiceRegisterUser        = errors.Join(errToDoService, errors.New("register user failed"))
 	ErrToDoServiceLoginUser           = errors.Join(errToDoService, errors.New("login user failed"))
 	ErrToDoServiceInvalidPasswordUser = errors.Join(ErrToDoServiceLoginUser, errors.New("invalid password email"))
@@ -31,7 +32,18 @@ func NewToDoService(provider ConnectionProvider, userRepo UsersRepository) *ToDo
 }
 
 func (s *ToDoService) Authenticate(ctx context.Context, token string) (User, error) {
-	panic("unimplemented")
+	var user User
+	var err error
+	err = s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
+		user, err = s.userRepo.ReadByToken(ctx, connection, token)
+
+		return err
+	})
+	if err != nil {
+		err = errors.Join(ErrToDoServiceAuthenticate, err)
+	}
+
+	return user, err
 }
 
 func (s *ToDoService) RegisterUser(ctx context.Context, name string, email string, passwordHash string, token string) error {
