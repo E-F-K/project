@@ -5,17 +5,22 @@ import (
 	"errors"
 	"log/slog"
 	"os"
+	"time"
 	"todo_list/internal/adapter/controller"
 	"todo_list/internal/adapter/database"
 	"todo_list/internal/adapter/logger"
 	"todo_list/internal/adapter/repository"
 	"todo_list/internal/domain"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load()
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -30,6 +35,16 @@ func main() {
 	defer func() { _ = toDo.Close() }()
 
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{os.Getenv("CORS_ALLOWED_ORIGIN")},
+		AllowMethods:     []string{"POST", "GET"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           time.Minute,
+	}))
+
 	router.POST("register", user.Register)
 	router.POST("login", user.Login)
 
@@ -39,7 +54,7 @@ func main() {
 		authRequired.GET("lists", toDo.GetUserLists)
 	}
 
-	router.Run(":8080")
+	router.Run(os.Getenv("SERVER_ADDRESS"))
 }
 
 func createControllers() (*controller.Users, *controller.ToDo, gin.HandlerFunc, error) {

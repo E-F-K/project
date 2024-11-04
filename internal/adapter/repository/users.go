@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 	"todo_list/internal/domain"
 )
 
@@ -26,11 +27,11 @@ func NewUsers() *Users {
 func (r Users) Create(ctx context.Context, connection domain.Connection, user domain.User) error {
 	const query = `
 insert into users
-    (id, name, email, password_hash, token)
+    (id, name, email, password_hash, token, updated_at)
 values
-    ($1, $2, $3, $4, $5)`
+    ($1, $2, $3, $4, $5, $6)`
 
-	_, err := connection.ExecContext(ctx, query, user.ID, user.Name, user.Email, user.PasswordHash, user.Token)
+	_, err := connection.ExecContext(ctx, query, user.ID, user.Name, user.Email, user.PasswordHash, user.Token, time.Now())
 	if err != nil {
 		err = errors.Join(ErrUsersCreate, err)
 	}

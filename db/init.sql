@@ -4,7 +4,7 @@ create table if not exists users (
     email TEXT not null,
     password_hash TEXT not null,
     token TEXT not null,
-    updated_at timestamp with time zone,
+    updated_at timestamp with time zone not null,
     unique(email),
     unique(token)
 );
