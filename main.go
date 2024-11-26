@@ -63,7 +63,7 @@ func createControllers() (*controller.Users, *controller.ToDo, gin.HandlerFunc, 
 		return nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
 	}
 
-	appService := domain.NewToDoService(database.NewPostgresProvider(pool), repository.NewUsers())
+	appService := domain.NewToDoService(database.NewPostgresProvider(pool), repository.NewUsers(), repository.NewLists())
 
 	authMiddlware := controller.NewAuthMiddleware(appService).Auth
 

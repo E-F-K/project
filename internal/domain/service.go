@@ -17,17 +17,20 @@ var (
 	ErrToDoServiceLoginUser           = errors.Join(errToDoService, errors.New("login user failed"))
 	ErrToDoServiceInvalidPasswordUser = errors.Join(ErrToDoServiceLoginUser, errors.New("invalid password email"))
 	ErrToDoServiceUpdateToken         = errors.Join(errToDoService, errors.New("update token failed"))
+	ErrToDoServiceCreateList          = errors.Join(errToDoService, errors.New("create list failed"))
 )
 
 type ToDoService struct {
 	provider ConnectionProvider
 	userRepo UsersRepository
+	listRepo ListsRepository
 }
 
-func NewToDoService(provider ConnectionProvider, userRepo UsersRepository) *ToDoService {
+func NewToDoService(provider ConnectionProvider, userRepo UsersRepository, listRepo ListsRepository) *ToDoService {
 	return &ToDoService{
 		provider: provider,
 		userRepo: userRepo,
+		listRepo: listRepo,
 	}
 }
 
@@ -94,6 +97,24 @@ func (s *ToDoService) UpdateToken(ctx context.Context, email string, token strin
 
 	return nil
 
+}
+
+func (s *ToDoService) CreateList(ctx context.Context, userID UserID, name string, email string) error {
+	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
+		list := List{
+			ID:     ListID(uuid.New()),
+			UserID: userID,
+			Name:   name,
+			Email:  email,
+		}
+
+		return s.listRepo.Create(ctx, connection, list)
+	})
+	if err != nil {
+		return errors.Join(ErrToDoServiceRegisterUser, err)
+	}
+
+	return nil
 }
 
 func (s *ToDoService) Close() error {

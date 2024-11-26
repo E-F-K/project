@@ -31,7 +31,7 @@ insert into lists
 values
     ($1, $2, $3, $4, $5)`
 
-	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name, list.Email, time.Time(list.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name, list.Email, time.Now())
 	if err != nil {
 		err = errors.Join(ErrListsCreate, err)
 	}

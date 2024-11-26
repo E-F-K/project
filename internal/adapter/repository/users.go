@@ -16,6 +16,8 @@ var (
 	ErrUsersUpdate             = errors.Join(errUsers, errors.New("update failed"))
 	ErrUsersDelete             = errors.Join(errUsers, errors.New("delete failed"))
 	ErrUsersUpdateTokenByEmail = errors.Join(errUsers, errors.New("update token by email failed"))
+	ErrUsersGetAllLists        = errors.Join(errUsers, errors.New("get all lists failed"))
+	ErrUsersGetAllTasks        = errors.Join(errUsers, errors.New("get all tasks failed"))
 )
 
 type Users struct{}
@@ -93,4 +95,27 @@ func (r Users) UpdateTokenByEmail(ctx context.Context, connection domain.Connect
 	}
 
 	return err
+}
+
+func (r Users) GetAllLists(ctx context.Context, connection domain.Connection, userID domain.UserID) ([]domain.List, error) {
+	const query = `select user_id, name, email, updated_at from lists where user_id = $1`
+	var lists []domain.List
+	err := connection.SelectContext(ctx, &lists, query, userID)
+	if err != nil {
+		err = errors.Join(ErrUsersGetAllLists, err)
+	}
+
+	return lists, err
+}
+
+func (r Users) GetAllTasks(ctx context.Context, connection domain.Connection, listsID []domain.ListID) ([]domain.Task, error) {
+	const query = `select id, list_id, priority, deadline, done, name, updated_at from tasks where list_id in ($1)`
+	var tasks []domain.Task
+
+	err := connection.SelectContext(ctx, &tasks, query, listsID)
+	if err != nil {
+		err = errors.Join(ErrUsersGetAllTasks, err)
+	}
+
+	return tasks, err
 }
