@@ -64,6 +64,12 @@ type (
 
 		io.Closer
 	}
+
+	ListService interface {
+		CreateList(ctx context.Context, user_id, name, email string) error
+
+		io.Closer
+	}
 )
 
 // Scan implements sql.Scanner.
