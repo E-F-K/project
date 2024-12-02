@@ -111,7 +111,7 @@ func (s *ToDoService) CreateList(ctx context.Context, userID UserID, name string
 		return s.listRepo.Create(ctx, connection, list)
 	})
 	if err != nil {
-		return errors.Join(ErrToDoServiceRegisterUser, err)
+		return errors.Join(ErrToDoServiceCreateList, err)
 	}
 
 	return nil

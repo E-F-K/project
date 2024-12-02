@@ -12,7 +12,7 @@ import (
 )
 
 type (
-	UserID uuid.UUID
+	UserID = uuid.UUID
 
 	User struct {
 		ID           UserID
@@ -22,15 +22,14 @@ type (
 		Token        string
 	}
 
-	ListID    uuid.UUID
-	Timestamp time.Time
+	ListID = uuid.UUID
 
 	List struct {
 		ID        ListID
 		UserID    UserID
 		Name      string
 		Email     string
-		UpdatedAT Timestamp
+		UpdatedAT time.Time
 	}
 
 	TaskID uuid.UUID
@@ -39,10 +38,10 @@ type (
 		ID        TaskID
 		ListID    ListID
 		Priority  Priority
-		Deadline  Timestamp
+		Deadline  time.Time
 		Done      bool
 		Name      string
-		UpdatedAT Timestamp
+		UpdatedAT time.Time
 	}
 
 	Connection interface {
@@ -71,26 +70,6 @@ type (
 		io.Closer
 	}
 )
-
-// Scan implements sql.Scanner.
-func (t *Timestamp) Scan(src any) error {
-	v, ok := src.(time.Time)
-	if !ok {
-		return errors.New("database value is not time.Time")
-	}
-
-	*t = Timestamp(v)
-
-	return nil
-}
-
-// Value implements driver.Valuer.
-func (t *Timestamp) Value() (driver.Value, error) {
-	return time.Time(*t), nil
-}
-
-var _ driver.Valuer = (*Timestamp)(nil)
-var _ sql.Scanner = (*Timestamp)(nil)
 
 type Priority string
 

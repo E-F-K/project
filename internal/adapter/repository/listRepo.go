@@ -74,3 +74,14 @@ func (r Lists) Update(ctx context.Context, connection domain.Connection, list do
 
 	return err
 }
+
+func (r Lists) GetAllLists(ctx context.Context, connection domain.Connection, userID domain.UserID) ([]domain.List, error) {
+	const query = `select user_id, name, email, updated_at from lists where user_id = $1`
+	var lists []domain.List
+	err := connection.SelectContext(ctx, &lists, query, userID)
+	if err != nil {
+		err = errors.Join(ErrUsersGetAllLists, err)
+	}
+
+	return lists, err
+}
