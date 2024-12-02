@@ -74,3 +74,15 @@ func (r Tasks) Update(ctx context.Context, connection domain.Connection, task do
 
 	return err
 }
+
+func (r Tasks) GetAllTasks(ctx context.Context, connection domain.Connection, listsIDs []domain.ListID) ([]domain.Task, error) {
+	const query = `select id, list_id, priority, deadline, done, name, updated_at from tasks where list_id = any($1)`
+
+	var tasks []domain.Task
+	err := connection.SelectContext(ctx, &tasks, query, listsIDs)
+	if err != nil {
+		err = errors.Join(ErrUsersGetAllTasks, err)
+	}
+
+	return tasks, err
+}

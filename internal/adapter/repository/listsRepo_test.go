@@ -14,30 +14,14 @@ import (
 
 func TestBasicListsOperations(t *testing.T) {
 	ctx := context.Background()
-
 	repoList := repository.NewLists()
-	repo := repository.NewUsers()
 	provider := cleanTablesAndCreateProvider(ctx, t)
-	defer func(){_ = provider.Close()}()
+	defer func() { _ = provider.Close() }()
 
 	provider.ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
-		myuuid := uuid.New()
-		user := domain.User{
-			ID:           domain.UserID(myuuid),
-			Name:         "user name",
-			Email:        "user@email.foo",
-			PasswordHash: "some password hash",
-		}
-		require.NoError(t, repo.Create(ctx, connection, user))
+		user := fixtureCreateUser(t, ctx, connection)
 
-		list := domain.List{
-			ID:        domain.ListID(uuid.New()),
-			UserID:    domain.UserID(myuuid),
-			Name:      "list name",
-			Email:     "user@email.foo",
-			UpdatedAT: domain.Timestamp(time.Now()),
-		}
-		require.NoError(t, repoList.Create(ctx, connection, list))
+		list := fixtureCreateList(t, ctx, connection, user.ID)
 
 		list.Name = "new list name"
 		require.NoError(t, repoList.Update(ctx, connection, list))
@@ -53,4 +37,17 @@ func TestBasicListsOperations(t *testing.T) {
 
 		return nil
 	})
+}
+
+func fixtureCreateList(t *testing.T, ctx context.Context, connection domain.Connection, userID domain.UserID) domain.List {
+	list := domain.List{
+		ID:        domain.ListID(uuid.New()),
+		UserID:    userID,
+		Name:      "list name",
+		Email:     "user@email.foo",
+		UpdatedAT: time.Now(),
+	}
+	require.NoError(t, repository.NewLists().Create(ctx, connection, list))
+
+	return list
 }

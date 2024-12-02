@@ -76,7 +76,7 @@ func (ctl *Lists) Create(c *gin.Context) {
 	err = ctl.service.CreateList(ctx, message.UserID, message.Name, parsedEmail.Address)
 	if err != nil {
 		slog.ErrorContext(ctx, "Create list failed.", logger.ErrAttr(err))
-		c.JSON(http.StatusUnprocessableEntity, errorResponse("Register user failed."))
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("Create list failed."))
 
 		return
 	}

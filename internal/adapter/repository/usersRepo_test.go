@@ -19,14 +19,7 @@ func TestBasicUserOperations(t *testing.T) {
 	defer func() { _ = provider.Close() }()
 
 	provider.ExecuteTx(ctx, func(ctx context.Context, connection domain.Connection) error {
-		user := domain.User{
-			ID:           domain.UserID(uuid.New()),
-			Name:         "user name",
-			Email:        "user@email.foo",
-			PasswordHash: "some password hash",
-			Token:        "some secret token",
-		}
-		require.NoError(t, repo.Create(ctx, connection, user))
+		user := fixtureCreateUser(t, ctx, connection)
 
 		user.Name = "new user name"
 		require.NoError(t, repo.Update(ctx, connection, user))
@@ -42,4 +35,17 @@ func TestBasicUserOperations(t *testing.T) {
 
 		return nil
 	})
+}
+
+func fixtureCreateUser(t *testing.T, ctx context.Context, connection domain.Connection) domain.User {
+	user := domain.User{
+		ID:           domain.UserID(uuid.New()),
+		Name:         "user name",
+		Email:        "user@email.foo",
+		PasswordHash: "some password hash",
+		Token:        "some secret token",
+	}
+	require.NoError(t, repository.NewUsers().Create(ctx, connection, user))
+
+	return user
 }
