@@ -23,10 +23,10 @@ const (
 var _ io.Closer = (*Users)(nil)
 
 type Users struct {
-	service domain.UserService
+	service domain.UserInterface
 }
 
-func NewUsers(service domain.UserService) *Users {
+func NewUsers(service domain.UserInterface) *Users {
 	return &Users{service: service}
 }
 

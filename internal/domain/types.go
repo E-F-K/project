@@ -28,7 +28,6 @@ type (
 		ID        ListID
 		UserID    UserID
 		Name      string
-		Email     string
 		UpdatedAT time.Time
 	}
 
@@ -55,7 +54,7 @@ type (
 		io.Closer
 	}
 
-	UserService interface {
+	UserInterface interface {
 		RegisterUser(ctx context.Context, name, email, passwordHash, token string) error
 		Authenticate(ctx context.Context, token string) (User, error)
 		Login(ctx context.Context, email, password string) error
@@ -64,8 +63,17 @@ type (
 		io.Closer
 	}
 
-	ListService interface {
-		CreateList(ctx context.Context, user_id, name, email string) error
+	ListInterface interface {
+		CreateList(ctx context.Context, listID, userID uuid.UUID, name string) error
+		ReadAll(ctx context.Context, d uuid.UUID) error
+		UpdateName(ctx context.Context, listID uuid.UUID, name string) error
+		DeleteList(ctx context.Context, listID uuid.UUID) error
+
+		io.Closer
+	}
+
+	TaskInterface interface {
+		CreateTask(ctx context.Context, taskID, userID uuid.UUID, name string) error
 
 		io.Closer
 	}

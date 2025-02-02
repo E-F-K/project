@@ -27,11 +27,11 @@ func NewLists() *Lists {
 func (r Lists) Create(ctx context.Context, connection domain.Connection, list domain.List) error {
 	const query = `
 insert into lists
-    (id, user_id, name, email, updated_at)
+    (id, user_id, name, updated_at)
 values
     ($1, $2, $3, $4, $5)`
 
-	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name, list.Email, time.Now())
+	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name, time.Now())
 	if err != nil {
 		err = errors.Join(ErrListsCreate, err)
 	}
@@ -51,7 +51,7 @@ func (r Lists) Delete(ctx context.Context, connection domain.Connection, ListID 
 }
 
 func (r Lists) Read(ctx context.Context, connection domain.Connection, listID domain.ListID) (domain.List, error) {
-	const query = `select user_id, name, email, updated_at from lists where id = $1`
+	const query = `select user_id, name, updated_at from lists where id = $1`
 
 	var list domain.List
 	err := connection.GetContext(ctx, &list, query, listID)
@@ -67,7 +67,7 @@ func (r Lists) Read(ctx context.Context, connection domain.Connection, listID do
 func (r Lists) Update(ctx context.Context, connection domain.Connection, list domain.List) error {
 	const query = `update lists set name = $2, email = $3, updated_at = $4 where id = $1`
 
-	_, err := connection.ExecContext(ctx, query, list.ID, list.Name, list.Email, time.Time(list.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, list.ID, list.Name, time.Time(list.UpdatedAT))
 	if err != nil {
 		err = errors.Join(ErrListsUpdate, err)
 	}

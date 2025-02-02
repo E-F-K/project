@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var _ UserService = (*ToDoService)(nil)
+var _ UserInterface = (*UserService)(nil)
 
 var (
 	errToDoService                    = errors.New("service error")
@@ -20,21 +20,19 @@ var (
 	ErrToDoServiceCreateList          = errors.Join(errToDoService, errors.New("create list failed"))
 )
 
-type ToDoService struct {
+type UserService struct {
 	provider ConnectionProvider
 	userRepo UsersRepository
-	listRepo ListsRepository
 }
 
-func NewToDoService(provider ConnectionProvider, userRepo UsersRepository, listRepo ListsRepository) *ToDoService {
-	return &ToDoService{
+func NewUserService(provider ConnectionProvider, userRepo UsersRepository) *UserService {
+	return &UserService{
 		provider: provider,
 		userRepo: userRepo,
-		listRepo: listRepo,
 	}
 }
 
-func (s *ToDoService) Authenticate(ctx context.Context, token string) (User, error) {
+func (s *UserService) Authenticate(ctx context.Context, token string) (User, error) {
 	var user User
 	var err error
 	err = s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
@@ -49,7 +47,7 @@ func (s *ToDoService) Authenticate(ctx context.Context, token string) (User, err
 	return user, err
 }
 
-func (s *ToDoService) RegisterUser(ctx context.Context, name string, email string, passwordHash string, token string) error {
+func (s *UserService) RegisterUser(ctx context.Context, name string, email string, passwordHash string, token string) error {
 	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
 		user := User{
 			ID:           UserID(uuid.New()),
@@ -68,7 +66,7 @@ func (s *ToDoService) RegisterUser(ctx context.Context, name string, email strin
 	return nil
 }
 
-func (s *ToDoService) Login(ctx context.Context, email string, password string) error {
+func (s *UserService) Login(ctx context.Context, email string, password string) error {
 	var user User
 	err := s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
 		var err error
@@ -87,7 +85,7 @@ func (s *ToDoService) Login(ctx context.Context, email string, password string) 
 	return nil
 }
 
-func (s *ToDoService) UpdateToken(ctx context.Context, email string, token string) error {
+func (s *UserService) UpdateToken(ctx context.Context, email string, token string) error {
 	err := s.provider.Execute(ctx, func(ctx context.Context, connection Connection) error {
 		return s.userRepo.UpdateTokenByEmail(ctx, connection, email, token)
 	})
@@ -99,24 +97,24 @@ func (s *ToDoService) UpdateToken(ctx context.Context, email string, token strin
 
 }
 
-func (s *ToDoService) CreateList(ctx context.Context, userID UserID, name string, email string) error {
-	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
-		list := List{
-			ID:     ListID(uuid.New()),
-			UserID: userID,
-			Name:   name,
-			Email:  email,
+/*
+	func (s *ToDoService) CreateList(ctx context.Context, userID UserID, name string) error {
+		err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
+			list := List{
+				ID:     ListID(uuid.New()),
+				UserID: userID,
+				Name:   name,
+			}
+
+			return s.listRepo.Create(ctx, connection, list)
+		})
+		if err != nil {
+			return errors.Join(ErrToDoServiceCreateList, err)
 		}
 
-		return s.listRepo.Create(ctx, connection, list)
-	})
-	if err != nil {
-		return errors.Join(ErrToDoServiceCreateList, err)
+		return nil
 	}
-
-	return nil
-}
-
-func (s *ToDoService) Close() error {
+*/
+func (s *UserService) Close() error {
 	return s.provider.Close()
 }
