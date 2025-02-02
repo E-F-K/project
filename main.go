@@ -26,13 +26,14 @@ func main() {
 
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
-	user, toDo, authMiddleware, err := createControllers()
+	users, lists, tasks, authMiddleware, err := createControllers()
 	if err != nil {
 		slog.ErrorContext(ctx, "Create application service failed.", logger.ErrAttr(err))
 		os.Exit(1)
 	}
-	defer func() { _ = user.Close() }()
-	defer func() { _ = toDo.Close() }()
+	defer func() { _ = users.Close() }()
+	defer func() { _ = lists.Close() }()
+	defer func() { _ = tasks.Close() }()
 
 	router := gin.Default()
 
@@ -45,27 +46,41 @@ func main() {
 		MaxAge:           time.Minute,
 	}))
 
-	router.POST("register", user.Register)
-	router.POST("login", user.Login)
+	router.POST("register", users.Register)
+	router.POST("login", users.Login)
 
 	authRequired := router.Group("/v1")
 	authRequired.Use(authMiddleware)
 	{
-		authRequired.GET("lists", toDo.GetUserLists)
+		authRequired.GET("list", lists.GetUserListsAndTasks)
+		authRequired.POST("list", lists.CreateList)
+		authRequired.PUT("list", lists.UpdateList) // set name
+		authRequired.DELETE("list", lists.DeleteList)
+
+		authRequired.POST("task", tasks.CreateTask)
+		authRequired.PUT("task/status", tasks.UpdateTaskStatus)
+		authRequired.PUT("task/priority", tasks.UpdateTaskPriority)
+		authRequired.PUT("task/name", tasks.UpdateTaskName)
+		authRequired.PUT("task/deadline", tasks.UpdateTaskDeadline)
+		authRequired.DELETE("list", tasks.DeleteTask)
+
 	}
 
 	router.Run(os.Getenv("SERVER_ADDRESS"))
 }
 
-func createControllers() (*controller.Users, *controller.ToDo, gin.HandlerFunc, error) {
+func createControllers() (*controller.Users, *controller.Lists, *controller.Tasks, gin.HandlerFunc, error) {
 	pool, err := pgxpool.New(context.Background(), domain.ConnectionString)
 	if err != nil {
-		return nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
+		return nil, nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
 	}
 
-	appService := domain.NewToDoService(database.NewPostgresProvider(pool), repository.NewUsers(), repository.NewLists())
+	userService := domain.NewUserService(database.NewPostgresProvider(pool), repository.NewUsers())
+	authMiddlware := controller.NewAuthMiddleware(userService).Auth
 
-	authMiddlware := controller.NewAuthMiddleware(appService).Auth
+	// TODO replace nils with actual serve implementations
+	var listService domain.ListInterface
+	var taskService domain.TaskInterface
 
-	return controller.NewUsers(appService), controller.NewToDo(), authMiddlware, nil
+	return controller.NewUsers(userService), controller.NewLists(listService), controller.NewTasks(taskService), authMiddlware, nil
 }

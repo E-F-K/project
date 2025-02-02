@@ -14,10 +14,10 @@ import (
 const ctxAuthUser = "ctx_auth_user"
 
 type AuthMiddleware struct {
-	userService domain.UserService
+	userService domain.UserInterface
 }
 
-func NewAuthMiddleware(userService domain.UserService) *AuthMiddleware {
+func NewAuthMiddleware(userService domain.UserInterface) *AuthMiddleware {
 	return &AuthMiddleware{
 		userService: userService,
 	}
