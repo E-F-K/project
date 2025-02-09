@@ -31,7 +31,7 @@ insert into tasks
 values
     ($1, $2, $3, $4, $5, $6, $7)`
 
-	_, err := connection.ExecContext(ctx, query, task.ID, task.ListID, domain.Priority(task.Priority), time.Time(task.Deadline), task.Done, task.Name, time.Time(task.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, task.ID, task.ListID, domain.Priority(task.Priority), task.Deadline, task.Done, task.Name, time.Time(task.UpdatedAT))
 	if err != nil {
 		err = errors.Join(ErrTasksCreate, err)
 	}
@@ -67,7 +67,7 @@ func (r Tasks) Read(ctx context.Context, connection domain.Connection, taskID do
 func (r Tasks) Update(ctx context.Context, connection domain.Connection, task domain.Task) error {
 	const query = `update tasks set name = $2, priority = $3, deadline = $4, done = $5, updated_at = $6 where id = $1`
 
-	_, err := connection.ExecContext(ctx, query, task.ID, task.Name, domain.Priority(task.Priority), time.Time(task.Deadline), task.Done, time.Time(task.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, task.ID, task.Name, domain.Priority(task.Priority), task.Deadline, task.Done, time.Time(task.UpdatedAT))
 	if err != nil {
 		err = errors.Join(ErrTasksUpdate, err)
 	}

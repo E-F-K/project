@@ -29,7 +29,7 @@ func (r Lists) Create(ctx context.Context, connection domain.Connection, list do
 insert into lists
     (id, user_id, name, updated_at)
 values
-    ($1, $2, $3, $4, $5)`
+    ($1, $2, $3, $4)`
 
 	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name, time.Now())
 	if err != nil {
@@ -65,9 +65,13 @@ func (r Lists) Read(ctx context.Context, connection domain.Connection, listID do
 }
 
 func (r Lists) Update(ctx context.Context, connection domain.Connection, list domain.List) error {
-	const query = `update lists set name = $2, email = $3, updated_at = $4 where id = $1`
+	if list.Tasks != nil {
+		return errors.Join(ErrListsUpdate, errors.New("task updates are not supported"))
+	}
 
-	_, err := connection.ExecContext(ctx, query, list.ID, list.Name, time.Time(list.UpdatedAT))
+	const query = `update lists set name = $2, updated_at = $3 where id = $1`
+
+	_, err := connection.ExecContext(ctx, query, list.ID, list.Name, list.UpdatedAt)
 	if err != nil {
 		err = errors.Join(ErrListsUpdate, err)
 	}
@@ -76,7 +80,7 @@ func (r Lists) Update(ctx context.Context, connection domain.Connection, list do
 }
 
 func (r Lists) GetAllLists(ctx context.Context, connection domain.Connection, userID domain.UserID) ([]domain.List, error) {
-	const query = `select user_id, name, email, updated_at from lists where user_id = $1`
+	const query = `select user_id, name, updated_at from lists where user_id = $1`
 	var lists []domain.List
 	err := connection.SelectContext(ctx, &lists, query, userID)
 	if err != nil {

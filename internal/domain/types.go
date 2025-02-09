@@ -2,9 +2,6 @@ package domain
 
 import (
 	"context"
-	"database/sql"
-	"database/sql/driver"
-	"errors"
 	"io"
 	"time"
 
@@ -25,22 +22,23 @@ type (
 	ListID = uuid.UUID
 
 	List struct {
-		ID        ListID
-		UserID    UserID
-		Name      string
-		UpdatedAT time.Time
+		ID        ListID    `json:"id"`
+		UserID    UserID    `json:"user_id,omitempty"`
+		Name      string    `json:"name"`
+		UpdatedAt time.Time `json:"updated_at,omitempty"`
+		Tasks     []Task    `json:"tasks,omitempty"`
 	}
 
-	TaskID uuid.UUID
+	TaskID = uuid.UUID
 
 	Task struct {
-		ID        TaskID
-		ListID    ListID
-		Priority  Priority
-		Deadline  time.Time
-		Done      bool
-		Name      string
-		UpdatedAT time.Time
+		ID        TaskID     `json:"id"`
+		ListID    ListID     `json:"list_id"`
+		Priority  Priority   `json:"priority"`
+		Deadline  *time.Time `json:"deadline"`
+		Done      bool       `json:"done,omitempty"`
+		Name      string     `json:"name"`
+		UpdatedAT time.Time  `json:"updated_at,omitempty"`
 	}
 
 	Connection interface {
@@ -48,6 +46,7 @@ type (
 		SelectContext(context.Context, any, string, ...any) error
 		ExecContext(context.Context, string, ...any) (int64, error)
 	}
+
 	ConnectionProvider interface {
 		Execute(context.Context, func(context.Context, Connection) error) error
 		ExecuteTx(context.Context, func(context.Context, Connection) error) error
@@ -64,44 +63,27 @@ type (
 	}
 
 	ListInterface interface {
-		CreateList(ctx context.Context, listID, userID uuid.UUID, name string) error
-		ReadAll(ctx context.Context, d uuid.UUID) error
-		UpdateName(ctx context.Context, listID uuid.UUID, name string) error
-		DeleteList(ctx context.Context, listID uuid.UUID) error
+		Create(context.Context, List) error
+		ReadAll(context.Context, UserID) ([]List, error)
+		Update(context.Context, List) error
+		Delete(context.Context, UserID, ListID) error
 
 		io.Closer
 	}
 
 	TaskInterface interface {
-		CreateTask(ctx context.Context, taskID, userID uuid.UUID, name string) error
+		Create(context.Context, Task) error
+		Update(context.Context, Task) error
+		Delete(context.Context, TaskID) error
 
 		io.Closer
 	}
 )
 
-type Priority string
+type Priority = string
 
 const (
 	Low    Priority = "low"
 	Normal Priority = "normal"
 	High   Priority = "high"
 )
-
-func (t *Priority) Scan(src any) error {
-	v, ok := src.(string)
-	if !ok {
-		return errors.New("database value is not string")
-	}
-
-	*t = Priority(v)
-
-	return nil
-}
-
-// Value implements driver.Valuer.
-func (t *Priority) Value() (driver.Value, error) {
-	return string(*t), nil
-}
-
-var _ driver.Valuer = (*Priority)(nil)
-var _ sql.Scanner = (*Priority)(nil)
