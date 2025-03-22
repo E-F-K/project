@@ -51,14 +51,15 @@ func TestUsers_GetAllTasks(t *testing.T) {
 }
 
 func fixtureCreateTask(t *testing.T, ctx context.Context, connection domain.Connection, listID domain.ListID, name string) domain.Task {
+	now := time.Now()
 	task := domain.Task{
 		ID:        domain.TaskID(uuid.New()),
 		ListID:    listID,
 		Priority:  "low",
-		Deadline:  time.Now(),
+		Deadline:  &now,
 		Done:      false,
 		Name:      name,
-		UpdatedAT: time.Now(),
+		UpdatedAT: now,
 	}
 	require.NoError(t, repository.NewTasks().Create(ctx, connection, task))
 

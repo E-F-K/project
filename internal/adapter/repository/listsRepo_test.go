@@ -44,7 +44,7 @@ func fixtureCreateList(t *testing.T, ctx context.Context, connection domain.Conn
 		ID:        domain.ListID(uuid.New()),
 		UserID:    userID,
 		Name:      "list name",
-		UpdatedAT: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 	require.NoError(t, repository.NewLists().Create(ctx, connection, list))
 
