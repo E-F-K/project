@@ -72,9 +72,9 @@ type (
 	}
 
 	TaskInterface interface {
-		Create(context.Context, Task) error
-		Update(context.Context, Task) error
-		Delete(context.Context, TaskID) error
+		Create(context.Context, UserID, Task) error
+		Update(context.Context, UserID, Task) error
+		Delete(context.Context, UserID, TaskID) error
 
 		io.Closer
 	}
