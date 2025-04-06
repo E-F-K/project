@@ -22,6 +22,7 @@ var (
 	ErrToDoServiceInvalidPasswordUser = errors.Join(ErrToDoServiceLoginUser, errors.New("invalid password email"))
 	ErrToDoServiceUpdateToken         = errors.Join(errToDoService, errors.New("update token failed"))
 	ErrToDoServiceCreateList          = errors.Join(errToDoService, errors.New("create list failed"))
+	ErrToDoServiceDeleteList          = errors.Join(errToDoService, errors.New("delete list failed"))
 )
 
 type UserService struct {
@@ -141,13 +142,38 @@ func (s *ListService) Close() error {
 }
 
 // Create implements ListInterface.
-func (s *ListService) Create(context.Context, List) error {
-	panic("unimplemented")
+func (s *ListService) Create(ctx context.Context, list List) error {
+	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
+		list := List{
+			ID:        ListID(uuid.New()),
+			UserID:    list.UserID,
+			Name:      list.Name,
+			UpdatedAt: list.UpdatedAt,
+			Tasks:     list.Tasks,
+		}
+
+		return s.listRepo.Create(ctx, connection, list)
+	})
+	if err != nil {
+		return errors.Join(ErrToDoServiceCreateList, err)
+	}
+
+	return nil
 }
 
 // Delete implements ListInterface.
-func (s *ListService) Delete(context.Context, UserID, ListID) error {
-	panic("unimplemented")
+func (s *ListService) Delete(ctx context.Context, userID UserID, listID ListID) error {
+	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
+
+		// listID ckeck for connection to the user ? s.listRepo.Ckeck ?
+
+		return s.listRepo.Delete(ctx, connection, listID)
+	})
+	if err != nil {
+		return errors.Join(ErrToDoServiceDeleteList, err)
+	}
+
+	return nil
 }
 
 // ReadAll implements ListInterface.
@@ -178,16 +204,16 @@ func (s *TaskService) Close() error {
 }
 
 // Create implements TaskInterface.
-func (s *TaskService) Create(context.Context, Task) error {
+func (s *TaskService) Create(context.Context, UserID, Task) error {
 	panic("unimplemented")
 }
 
 // Delete implements TaskInterface.
-func (s *TaskService) Delete(context.Context, TaskID) error {
+func (s *TaskService) Delete(context.Context, UserID, TaskID) error {
 	panic("unimplemented")
 }
 
 // Update implements TaskInterface.
-func (s *TaskService) Update(context.Context, Task) error {
+func (s *TaskService) Update(context.Context, UserID, Task) error {
 	panic("unimplemented")
 }
