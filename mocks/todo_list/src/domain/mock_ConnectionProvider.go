@@ -22,7 +22,7 @@ func (_m *MockConnectionProvider) EXPECT() *MockConnectionProvider_Expecter {
 	return &MockConnectionProvider_Expecter{mock: &_m.Mock}
 }
 
-// Close provides a mock function with given fields:
+// Close provides a mock function with no fields
 func (_m *MockConnectionProvider) Close() error {
 	ret := _m.Called()
 
