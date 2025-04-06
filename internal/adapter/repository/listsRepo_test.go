@@ -31,7 +31,7 @@ func TestBasicListsOperations(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, list.Name, newList.Name)
 
-		require.NoError(t, repoList.Delete(ctx, connection, list.ID))
+		require.NoError(t, repoList.Delete(ctx, connection, user.ID, list.ID))
 
 		_, err = repoList.Read(ctx, connection, list.ID)
 		require.ErrorIs(t, err, sql.ErrNoRows)

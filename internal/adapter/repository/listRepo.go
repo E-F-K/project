@@ -39,7 +39,8 @@ values
 	return err
 }
 
-func (r Lists) Delete(ctx context.Context, connection domain.Connection, ListID domain.ListID) error {
+func (r Lists) Delete(ctx context.Context, connection domain.Connection, UserID domain.UserID, ListID domain.ListID) error {
+	// userID check?
 	const query = `delete from lists where id = $1`
 
 	_, err := connection.ExecContext(ctx, query, ListID)
