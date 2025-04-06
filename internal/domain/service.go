@@ -8,7 +8,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var _ UserInterface = (*UserService)(nil)
+var (
+	_ UserInterface = (*UserService)(nil)
+	_ ListInterface = (*ListService)(nil)
+	_ TaskInterface = (*TaskService)(nil)
+)
 
 var (
 	errToDoService                    = errors.New("service error")
@@ -117,4 +121,73 @@ func (s *UserService) UpdateToken(ctx context.Context, email string, token strin
 */
 func (s *UserService) Close() error {
 	return s.provider.Close()
+}
+
+type ListService struct {
+	provider ConnectionProvider
+	listRepo ListsRepository
+}
+
+func NewListService(provider ConnectionProvider, listRepo ListsRepository) *ListService {
+	return &ListService{
+		provider: provider,
+		listRepo: listRepo,
+	}
+}
+
+// Close implements ListInterface.
+func (s *ListService) Close() error {
+	return s.provider.Close()
+}
+
+// Create implements ListInterface.
+func (s *ListService) Create(context.Context, List) error {
+	panic("unimplemented")
+}
+
+// Delete implements ListInterface.
+func (s *ListService) Delete(context.Context, UserID, ListID) error {
+	panic("unimplemented")
+}
+
+// ReadAll implements ListInterface.
+func (s *ListService) ReadAll(context.Context, UserID) ([]List, error) {
+	panic("unimplemented")
+}
+
+// Update implements ListInterface.
+func (s *ListService) Update(context.Context, List) error {
+	panic("unimplemented")
+}
+
+type TaskService struct {
+	provider ConnectionProvider
+	taskRepo TasksRepository
+}
+
+func NewTaskService(provider ConnectionProvider, taskRepo TasksRepository) *TaskService {
+	return &TaskService{
+		provider: provider,
+		taskRepo: taskRepo,
+	}
+}
+
+// Close implements TaskInterface.
+func (s *TaskService) Close() error {
+	return s.provider.Close()
+}
+
+// Create implements TaskInterface.
+func (s *TaskService) Create(context.Context, Task) error {
+	panic("unimplemented")
+}
+
+// Delete implements TaskInterface.
+func (s *TaskService) Delete(context.Context, TaskID) error {
+	panic("unimplemented")
+}
+
+// Update implements TaskInterface.
+func (s *TaskService) Update(context.Context, Task) error {
+	panic("unimplemented")
 }

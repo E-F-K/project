@@ -118,26 +118,26 @@ func (_c *MockUsersRepository_Delete_Call) RunAndReturn(run func(context.Context
 	return _c
 }
 
-// Read provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockUsersRepository) Read(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID) (domain.User, error) {
+// ReadByEmail provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockUsersRepository) ReadByEmail(_a0 context.Context, _a1 domain.Connection, _a2 string) (domain.User, error) {
 	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Read")
+		panic("no return value specified for ReadByEmail")
 	}
 
 	var r0 domain.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, string) (domain.User, error)); ok {
 		return rf(_a0, _a1, _a2)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, string) domain.User); ok {
 		r0 = rf(_a0, _a1, _a2)
 	} else {
 		r0 = ret.Get(0).(domain.User)
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, domain.UserID) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, string) error); ok {
 		r1 = rf(_a0, _a1, _a2)
 	} else {
 		r1 = ret.Error(1)
@@ -146,32 +146,90 @@ func (_m *MockUsersRepository) Read(_a0 context.Context, _a1 domain.Connection, 
 	return r0, r1
 }
 
-// MockUsersRepository_Read_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Read'
-type MockUsersRepository_Read_Call struct {
+// MockUsersRepository_ReadByEmail_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReadByEmail'
+type MockUsersRepository_ReadByEmail_Call struct {
 	*mock.Call
 }
 
-// Read is a helper method to define mock.On call
+// ReadByEmail is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.UserID
-func (_e *MockUsersRepository_Expecter) Read(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockUsersRepository_Read_Call {
-	return &MockUsersRepository_Read_Call{Call: _e.mock.On("Read", _a0, _a1, _a2)}
+//   - _a2 string
+func (_e *MockUsersRepository_Expecter) ReadByEmail(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockUsersRepository_ReadByEmail_Call {
+	return &MockUsersRepository_ReadByEmail_Call{Call: _e.mock.On("ReadByEmail", _a0, _a1, _a2)}
 }
 
-func (_c *MockUsersRepository_Read_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID)) *MockUsersRepository_Read_Call {
+func (_c *MockUsersRepository_ReadByEmail_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 string)) *MockUsersRepository_ReadByEmail_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(string))
 	})
 	return _c
 }
 
-func (_c *MockUsersRepository_Read_Call) Return(_a0 domain.User, _a1 error) *MockUsersRepository_Read_Call {
+func (_c *MockUsersRepository_ReadByEmail_Call) Return(_a0 domain.User, _a1 error) *MockUsersRepository_ReadByEmail_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockUsersRepository_Read_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID) (domain.User, error)) *MockUsersRepository_Read_Call {
+func (_c *MockUsersRepository_ReadByEmail_Call) RunAndReturn(run func(context.Context, domain.Connection, string) (domain.User, error)) *MockUsersRepository_ReadByEmail_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ReadByToken provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockUsersRepository) ReadByToken(_a0 context.Context, _a1 domain.Connection, _a2 string) (domain.User, error) {
+	ret := _m.Called(_a0, _a1, _a2)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ReadByToken")
+	}
+
+	var r0 domain.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, string) (domain.User, error)); ok {
+		return rf(_a0, _a1, _a2)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, string) domain.User); ok {
+		r0 = rf(_a0, _a1, _a2)
+	} else {
+		r0 = ret.Get(0).(domain.User)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, string) error); ok {
+		r1 = rf(_a0, _a1, _a2)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockUsersRepository_ReadByToken_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReadByToken'
+type MockUsersRepository_ReadByToken_Call struct {
+	*mock.Call
+}
+
+// ReadByToken is a helper method to define mock.On call
+//   - _a0 context.Context
+//   - _a1 domain.Connection
+//   - _a2 string
+func (_e *MockUsersRepository_Expecter) ReadByToken(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockUsersRepository_ReadByToken_Call {
+	return &MockUsersRepository_ReadByToken_Call{Call: _e.mock.On("ReadByToken", _a0, _a1, _a2)}
+}
+
+func (_c *MockUsersRepository_ReadByToken_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 string)) *MockUsersRepository_ReadByToken_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *MockUsersRepository_ReadByToken_Call) Return(_a0 domain.User, _a1 error) *MockUsersRepository_ReadByToken_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockUsersRepository_ReadByToken_Call) RunAndReturn(run func(context.Context, domain.Connection, string) (domain.User, error)) *MockUsersRepository_ReadByToken_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -220,6 +278,55 @@ func (_c *MockUsersRepository_Update_Call) Return(_a0 error) *MockUsersRepositor
 }
 
 func (_c *MockUsersRepository_Update_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.User) error) *MockUsersRepository_Update_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTokenByEmail provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockUsersRepository) UpdateTokenByEmail(_a0 context.Context, _a1 domain.Connection, _a2 string, _a3 string) error {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTokenByEmail")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, string, string) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockUsersRepository_UpdateTokenByEmail_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTokenByEmail'
+type MockUsersRepository_UpdateTokenByEmail_Call struct {
+	*mock.Call
+}
+
+// UpdateTokenByEmail is a helper method to define mock.On call
+//   - _a0 context.Context
+//   - _a1 domain.Connection
+//   - _a2 string
+//   - _a3 string
+func (_e *MockUsersRepository_Expecter) UpdateTokenByEmail(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockUsersRepository_UpdateTokenByEmail_Call {
+	return &MockUsersRepository_UpdateTokenByEmail_Call{Call: _e.mock.On("UpdateTokenByEmail", _a0, _a1, _a2, _a3)}
+}
+
+func (_c *MockUsersRepository_UpdateTokenByEmail_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 string, _a3 string)) *MockUsersRepository_UpdateTokenByEmail_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(string), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockUsersRepository_UpdateTokenByEmail_Call) Return(_a0 error) *MockUsersRepository_UpdateTokenByEmail_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockUsersRepository_UpdateTokenByEmail_Call) RunAndReturn(run func(context.Context, domain.Connection, string, string) error) *MockUsersRepository_UpdateTokenByEmail_Call {
 	_c.Call.Return(run)
 	return _c
 }

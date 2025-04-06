@@ -1,4 +1,6 @@
 dir: mocks/{{ replaceAll .PackagePath "internal" "src" }}
+resolve-type-alias: false
+issue-845-fix: true
 packages:
   todo_list/internal/domain:
     config:

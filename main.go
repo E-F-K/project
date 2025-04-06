@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 	"time"
+
 	"todo_list/internal/adapter/controller"
 	"todo_list/internal/adapter/database"
 	"todo_list/internal/adapter/logger"
@@ -74,12 +75,11 @@ func createControllers() (*controller.Users, *controller.Lists, *controller.Task
 		return nil, nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
 	}
 
-	userService := domain.NewUserService(database.NewPostgresProvider(pool), repository.NewUsers())
+	provider := database.NewPostgresProvider(pool)
+	userService := domain.NewUserService(provider, repository.NewUsers())
+	listService := domain.NewListService(provider, repository.NewLists())
+	taskService := domain.NewTaskService(provider, repository.NewTasks())
 	authMiddlware := controller.NewAuthMiddleware(userService).Auth
-
-	// TODO replace nils with actual serve implementations
-	var listService domain.ListInterface
-	var taskService domain.TaskInterface
 
 	return controller.NewUsers(userService), controller.NewLists(listService), controller.NewTasks(taskService), authMiddlware, nil
 }

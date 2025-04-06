@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+
 	"todo_list/internal/domain"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
