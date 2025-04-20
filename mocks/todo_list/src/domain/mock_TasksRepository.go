@@ -70,17 +70,17 @@ func (_c *MockTasksRepository_Create_Call) RunAndReturn(run func(context.Context
 	return _c
 }
 
-// Delete provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockTasksRepository) Delete(_a0 context.Context, _a1 domain.Connection, _a2 domain.TaskID) error {
-	ret := _m.Called(_a0, _a1, _a2)
+// Delete provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockTasksRepository) Delete(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.TaskID) error {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.TaskID) error); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.TaskID) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -96,14 +96,15 @@ type MockTasksRepository_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.TaskID
-func (_e *MockTasksRepository_Expecter) Delete(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTasksRepository_Delete_Call {
-	return &MockTasksRepository_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 domain.TaskID
+func (_e *MockTasksRepository_Expecter) Delete(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockTasksRepository_Delete_Call {
+	return &MockTasksRepository_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockTasksRepository_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.TaskID)) *MockTasksRepository_Delete_Call {
+func (_c *MockTasksRepository_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.TaskID)) *MockTasksRepository_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.TaskID))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].(domain.TaskID))
 	})
 	return _c
 }
@@ -113,7 +114,7 @@ func (_c *MockTasksRepository_Delete_Call) Return(_a0 error) *MockTasksRepositor
 	return _c
 }
 
-func (_c *MockTasksRepository_Delete_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.TaskID) error) *MockTasksRepository_Delete_Call {
+func (_c *MockTasksRepository_Delete_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, domain.TaskID) error) *MockTasksRepository_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -236,17 +237,17 @@ func (_c *MockTasksRepository_Read_Call) RunAndReturn(run func(context.Context, 
 	return _c
 }
 
-// Update provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockTasksRepository) Update(_a0 context.Context, _a1 domain.Connection, _a2 domain.Task) error {
-	ret := _m.Called(_a0, _a1, _a2)
+// Update provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockTasksRepository) Update(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.Task) error {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.Task) error); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.Task) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -262,14 +263,15 @@ type MockTasksRepository_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.Task
-func (_e *MockTasksRepository_Expecter) Update(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTasksRepository_Update_Call {
-	return &MockTasksRepository_Update_Call{Call: _e.mock.On("Update", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 domain.Task
+func (_e *MockTasksRepository_Expecter) Update(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockTasksRepository_Update_Call {
+	return &MockTasksRepository_Update_Call{Call: _e.mock.On("Update", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockTasksRepository_Update_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.Task)) *MockTasksRepository_Update_Call {
+func (_c *MockTasksRepository_Update_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.Task)) *MockTasksRepository_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.Task))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].(domain.Task))
 	})
 	return _c
 }
@@ -279,7 +281,7 @@ func (_c *MockTasksRepository_Update_Call) Return(_a0 error) *MockTasksRepositor
 	return _c
 }
 
-func (_c *MockTasksRepository_Update_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.Task) error) *MockTasksRepository_Update_Call {
+func (_c *MockTasksRepository_Update_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, domain.Task) error) *MockTasksRepository_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

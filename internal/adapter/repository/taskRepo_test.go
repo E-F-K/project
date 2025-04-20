@@ -26,23 +26,23 @@ func TestUsers_GetAllTasks(t *testing.T) {
 
 		list := fixtureCreateList(t, ctx, connection, user.ID)
 
-		_ = fixtureCreateTask(t, ctx, connection, list.ID, "firstTask")
-		_ = fixtureCreateTask(t, ctx, connection, list.ID, "secondTask")
+		_ = fixtureCreateTask(t, ctx, connection, user.ID, list.ID, "firstTask")
+		_ = fixtureCreateTask(t, ctx, connection, user.ID, list.ID, "secondTask")
 
 		tasks, err := repoTask.GetAllTasks(ctx, connection, []domain.ListID{list.ID})
 		require.NoError(t, err)
 		require.Equal(t, 2, len(tasks))
 
-		task := fixtureCreateTask(t, ctx, connection, list.ID, "thirdTask")
+		task := fixtureCreateTask(t, ctx, connection, user.ID, list.ID, "thirdTask")
 
 		task.Name = "new task name"
-		require.NoError(t, repoTask.Update(ctx, connection, task))
+		require.NoError(t, repoTask.Update(ctx, connection, user.ID, task))
 
 		newTask, err := repoTask.Read(ctx, connection, task.ID)
 		require.NoError(t, err)
 		require.Equal(t, task.Name, newTask.Name)
 
-		require.NoError(t, repoTask.Delete(ctx, connection, task.ID))
+		require.NoError(t, repoTask.Delete(ctx, connection, user.ID, task.ID))
 
 		_, err = repoTask.Read(ctx, connection, task.ID)
 		require.ErrorIs(t, err, sql.ErrNoRows)
@@ -51,7 +51,7 @@ func TestUsers_GetAllTasks(t *testing.T) {
 	})
 }
 
-func fixtureCreateTask(t *testing.T, ctx context.Context, connection domain.Connection, listID domain.ListID, name string) domain.Task {
+func fixtureCreateTask(t *testing.T, ctx context.Context, connection domain.Connection, userID domain.UserID, listID domain.ListID, name string) domain.Task {
 	now := time.Now()
 	task := domain.Task{
 		ID:        domain.TaskID(uuid.New()),
@@ -62,7 +62,7 @@ func fixtureCreateTask(t *testing.T, ctx context.Context, connection domain.Conn
 		Name:      name,
 		UpdatedAT: now,
 	}
-	require.NoError(t, repository.NewTasks().Create(ctx, connection, task))
+	require.NoError(t, repository.NewTasks().Create(ctx, connection, userID, task))
 
 	return task
 }

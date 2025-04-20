@@ -70,17 +70,17 @@ func (_c *MockListsRepository_Create_Call) RunAndReturn(run func(context.Context
 	return _c
 }
 
-// Delete provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockListsRepository) Delete(_a0 context.Context, _a1 domain.Connection, _a2 domain.ListID) error {
-	ret := _m.Called(_a0, _a1, _a2)
+// Delete provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockListsRepository) Delete(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.ListID) error {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.ListID) error); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.ListID) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -96,14 +96,15 @@ type MockListsRepository_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.ListID
-func (_e *MockListsRepository_Expecter) Delete(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockListsRepository_Delete_Call {
-	return &MockListsRepository_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 domain.ListID
+func (_e *MockListsRepository_Expecter) Delete(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockListsRepository_Delete_Call {
+	return &MockListsRepository_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockListsRepository_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.ListID)) *MockListsRepository_Delete_Call {
+func (_c *MockListsRepository_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.ListID)) *MockListsRepository_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.ListID))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].(domain.ListID))
 	})
 	return _c
 }
@@ -113,7 +114,7 @@ func (_c *MockListsRepository_Delete_Call) Return(_a0 error) *MockListsRepositor
 	return _c
 }
 
-func (_c *MockListsRepository_Delete_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.ListID) error) *MockListsRepository_Delete_Call {
+func (_c *MockListsRepository_Delete_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, domain.ListID) error) *MockListsRepository_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
