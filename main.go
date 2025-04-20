@@ -59,14 +59,8 @@ func main() {
 		authRequired.DELETE("list", lists.DeleteList)
 
 		authRequired.POST("task", tasks.CreateTask)
-		authRequired.PUT("task/status", tasks.UpdateTask)
-		/*
-			authRequired.PUT("task/status", tasks.UpdateTaskStatus)
-			authRequired.PUT("task/priority", tasks.UpdateTaskPriority)
-			authRequired.PUT("task/name", tasks.UpdateTaskName)
-			authRequired.PUT("task/deadline", tasks.UpdateTaskDeadline)
-		*/
-		authRequired.DELETE("list", tasks.DeleteTask)
+		authRequired.PUT("task", tasks.UpdateTask)
+		authRequired.DELETE("task", tasks.DeleteTask)
 	}
 
 	router.Run(os.Getenv("SERVER_ADDRESS"))

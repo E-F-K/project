@@ -24,30 +24,31 @@ func NewTasks() *Tasks {
 	return &Tasks{}
 }
 
-func (r Tasks) Create(ctx context.Context, connection domain.Connection, task domain.Task) error {
+func (r Tasks) Create(ctx context.Context, connection domain.Connection, userID domain.UserID, task domain.Task) error {
 	const query = `
-insert into tasks
-    (id, list_id, priority, deadline, done, name, updated_at)
-values
-    ($1, $2, $3, $4, $5, $6, $7)`
+    insert into tasks (id, list_id, priority, deadline, done, name, updated_at)
+    select $1, $2, $3, $4, $5, $6, $7
+    where exists (select 1 from lists where id = $2 AND user_id = $8)`
 
-	_, err := connection.ExecContext(ctx, query, task.ID, task.ListID, domain.Priority(task.Priority), task.Deadline, task.Done, task.Name, time.Time(task.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, task.ID, task.ListID, domain.Priority(task.Priority), task.Deadline, task.Done, task.Name, time.Time(task.UpdatedAT), userID)
+
 	if err != nil {
-		err = errors.Join(ErrTasksCreate, err)
+		return errors.Join(ErrTasksCreate, err)
 	}
 
-	return err
+	return nil
 }
 
-func (r Tasks) Delete(ctx context.Context, connection domain.Connection, taskID domain.TaskID) error {
-	const query = `delete from tasks where id = $1`
+func (r Tasks) Delete(ctx context.Context, connection domain.Connection, userID domain.UserID, taskID domain.TaskID) error {
+	// userID ckeck !!!
+	const query = `delete from tasks where id = $1 and exists (select 1 from lists where lists.id = tasks.list_id and lists.user_id = $2)`
 
-	_, err := connection.ExecContext(ctx, query, taskID)
+	_, err := connection.ExecContext(ctx, query, taskID, userID)
 	if err != nil {
-		err = errors.Join(ErrTasksDelete, err)
+		return errors.Join(ErrTasksDelete, err)
 	}
 
-	return err
+	return nil
 }
 
 func (r Tasks) Read(ctx context.Context, connection domain.Connection, taskID domain.TaskID) (domain.Task, error) {
@@ -64,10 +65,11 @@ func (r Tasks) Read(ctx context.Context, connection domain.Connection, taskID do
 	return task, err
 }
 
-func (r Tasks) Update(ctx context.Context, connection domain.Connection, task domain.Task) error {
-	const query = `update tasks set name = $2, priority = $3, deadline = $4, done = $5, updated_at = $6 where id = $1`
+func (r Tasks) Update(ctx context.Context, connection domain.Connection, userID domain.UserID, task domain.Task) error {
+	// userID ckeck !!! doesnt work !!
+	const query = `update tasks set name = $2, priority = $3, deadline = $4, done = $5, updated_at = $6 where id = $1 and exists (select 1 from lists where lists.id = tasks.list_id and lists.user_id = $7)`
 
-	_, err := connection.ExecContext(ctx, query, task.ID, task.Name, domain.Priority(task.Priority), task.Deadline, task.Done, time.Time(task.UpdatedAT))
+	_, err := connection.ExecContext(ctx, query, task.ID, task.Name, domain.Priority(task.Priority), task.Deadline, task.Done, time.Time(task.UpdatedAT), userID)
 	if err != nil {
 		err = errors.Join(ErrTasksUpdate, err)
 	}

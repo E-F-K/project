@@ -67,17 +67,17 @@ func (_c *MockTaskInterface_Close_Call) RunAndReturn(run func() error) *MockTask
 	return _c
 }
 
-// Create provides a mock function with given fields: _a0, _a1
-func (_m *MockTaskInterface) Create(_a0 context.Context, _a1 domain.Task) error {
-	ret := _m.Called(_a0, _a1)
+// Create provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockTaskInterface) Create(_a0 context.Context, _a1 domain.UserID, _a2 domain.Task) error {
+	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Task) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.UserID, domain.Task) error); ok {
+		r0 = rf(_a0, _a1, _a2)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -92,14 +92,15 @@ type MockTaskInterface_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - _a0 context.Context
-//   - _a1 domain.Task
-func (_e *MockTaskInterface_Expecter) Create(_a0 interface{}, _a1 interface{}) *MockTaskInterface_Create_Call {
-	return &MockTaskInterface_Create_Call{Call: _e.mock.On("Create", _a0, _a1)}
+//   - _a1 domain.UserID
+//   - _a2 domain.Task
+func (_e *MockTaskInterface_Expecter) Create(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTaskInterface_Create_Call {
+	return &MockTaskInterface_Create_Call{Call: _e.mock.On("Create", _a0, _a1, _a2)}
 }
 
-func (_c *MockTaskInterface_Create_Call) Run(run func(_a0 context.Context, _a1 domain.Task)) *MockTaskInterface_Create_Call {
+func (_c *MockTaskInterface_Create_Call) Run(run func(_a0 context.Context, _a1 domain.UserID, _a2 domain.Task)) *MockTaskInterface_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Task))
+		run(args[0].(context.Context), args[1].(domain.UserID), args[2].(domain.Task))
 	})
 	return _c
 }
@@ -109,22 +110,22 @@ func (_c *MockTaskInterface_Create_Call) Return(_a0 error) *MockTaskInterface_Cr
 	return _c
 }
 
-func (_c *MockTaskInterface_Create_Call) RunAndReturn(run func(context.Context, domain.Task) error) *MockTaskInterface_Create_Call {
+func (_c *MockTaskInterface_Create_Call) RunAndReturn(run func(context.Context, domain.UserID, domain.Task) error) *MockTaskInterface_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Delete provides a mock function with given fields: _a0, _a1
-func (_m *MockTaskInterface) Delete(_a0 context.Context, _a1 domain.TaskID) error {
-	ret := _m.Called(_a0, _a1)
+// Delete provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockTaskInterface) Delete(_a0 context.Context, _a1 domain.UserID, _a2 domain.TaskID) error {
+	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.TaskID) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.UserID, domain.TaskID) error); ok {
+		r0 = rf(_a0, _a1, _a2)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -139,14 +140,15 @@ type MockTaskInterface_Delete_Call struct {
 
 // Delete is a helper method to define mock.On call
 //   - _a0 context.Context
-//   - _a1 domain.TaskID
-func (_e *MockTaskInterface_Expecter) Delete(_a0 interface{}, _a1 interface{}) *MockTaskInterface_Delete_Call {
-	return &MockTaskInterface_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1)}
+//   - _a1 domain.UserID
+//   - _a2 domain.TaskID
+func (_e *MockTaskInterface_Expecter) Delete(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTaskInterface_Delete_Call {
+	return &MockTaskInterface_Delete_Call{Call: _e.mock.On("Delete", _a0, _a1, _a2)}
 }
 
-func (_c *MockTaskInterface_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.TaskID)) *MockTaskInterface_Delete_Call {
+func (_c *MockTaskInterface_Delete_Call) Run(run func(_a0 context.Context, _a1 domain.UserID, _a2 domain.TaskID)) *MockTaskInterface_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.TaskID))
+		run(args[0].(context.Context), args[1].(domain.UserID), args[2].(domain.TaskID))
 	})
 	return _c
 }
@@ -156,22 +158,22 @@ func (_c *MockTaskInterface_Delete_Call) Return(_a0 error) *MockTaskInterface_De
 	return _c
 }
 
-func (_c *MockTaskInterface_Delete_Call) RunAndReturn(run func(context.Context, domain.TaskID) error) *MockTaskInterface_Delete_Call {
+func (_c *MockTaskInterface_Delete_Call) RunAndReturn(run func(context.Context, domain.UserID, domain.TaskID) error) *MockTaskInterface_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Update provides a mock function with given fields: _a0, _a1
-func (_m *MockTaskInterface) Update(_a0 context.Context, _a1 domain.Task) error {
-	ret := _m.Called(_a0, _a1)
+// Update provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockTaskInterface) Update(_a0 context.Context, _a1 domain.UserID, _a2 domain.Task) error {
+	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Task) error); ok {
-		r0 = rf(_a0, _a1)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.UserID, domain.Task) error); ok {
+		r0 = rf(_a0, _a1, _a2)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -186,14 +188,15 @@ type MockTaskInterface_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - _a0 context.Context
-//   - _a1 domain.Task
-func (_e *MockTaskInterface_Expecter) Update(_a0 interface{}, _a1 interface{}) *MockTaskInterface_Update_Call {
-	return &MockTaskInterface_Update_Call{Call: _e.mock.On("Update", _a0, _a1)}
+//   - _a1 domain.UserID
+//   - _a2 domain.Task
+func (_e *MockTaskInterface_Expecter) Update(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTaskInterface_Update_Call {
+	return &MockTaskInterface_Update_Call{Call: _e.mock.On("Update", _a0, _a1, _a2)}
 }
 
-func (_c *MockTaskInterface_Update_Call) Run(run func(_a0 context.Context, _a1 domain.Task)) *MockTaskInterface_Update_Call {
+func (_c *MockTaskInterface_Update_Call) Run(run func(_a0 context.Context, _a1 domain.UserID, _a2 domain.Task)) *MockTaskInterface_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Task))
+		run(args[0].(context.Context), args[1].(domain.UserID), args[2].(domain.Task))
 	})
 	return _c
 }
@@ -203,7 +206,7 @@ func (_c *MockTaskInterface_Update_Call) Return(_a0 error) *MockTaskInterface_Up
 	return _c
 }
 
-func (_c *MockTaskInterface_Update_Call) RunAndReturn(run func(context.Context, domain.Task) error) *MockTaskInterface_Update_Call {
+func (_c *MockTaskInterface_Update_Call) RunAndReturn(run func(context.Context, domain.UserID, domain.Task) error) *MockTaskInterface_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

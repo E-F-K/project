@@ -64,7 +64,7 @@ type (
 
 	ListInterface interface {
 		Create(context.Context, List) error
-		ReadAll(context.Context, UserID) ([]List, error)
+		GetAll(context.Context, UserID) ([]List, error)
 		Update(context.Context, List) error
 		Delete(context.Context, UserID, ListID) error
 

@@ -25,7 +25,7 @@ func NewLists(service domain.ListInterface) *Lists {
 func (ctl *Lists) GetUserListsAndTasks(c *gin.Context) {
 	ctx, curUser := c.Request.Context(), getCurrentUser(c)
 
-	listAndTasks, err := ctl.service.ReadAll(ctx, curUser.ID)
+	listAndTasks, err := ctl.service.GetAll(ctx, curUser.ID)
 	if err != nil {
 		slog.ErrorContext(ctx, "Read all failed.", logger.ErrAttr(err))
 		c.JSON(http.StatusUnprocessableEntity, errorResponse("Read all failed."))
@@ -85,7 +85,7 @@ func (ctl *Lists) UpdateList(c *gin.Context) {
 
 		return
 	}
-
+	// Вот здесь
 	list.UserID = curUser.ID
 
 	if err = ctl.service.Update(ctx, list); err != nil {

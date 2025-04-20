@@ -40,15 +40,15 @@ values
 }
 
 func (r Lists) Delete(ctx context.Context, connection domain.Connection, UserID domain.UserID, ListID domain.ListID) error {
-	// userID check?
-	const query = `delete from lists where id = $1`
+	// norm?
+	const query = `delete from lists where id = $1 and user_id = $2`
 
-	_, err := connection.ExecContext(ctx, query, ListID)
+	_, err := connection.ExecContext(ctx, query, ListID, UserID)
 	if err != nil {
-		err = errors.Join(ErrListsDelete, err)
+		return errors.Join(ErrListsDelete, err)
 	}
 
-	return err
+	return nil
 }
 
 func (r Lists) Read(ctx context.Context, connection domain.Connection, listID domain.ListID) (domain.List, error) {

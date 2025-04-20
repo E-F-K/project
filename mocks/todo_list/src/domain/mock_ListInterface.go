@@ -162,12 +162,12 @@ func (_c *MockListInterface_Delete_Call) RunAndReturn(run func(context.Context, 
 	return _c
 }
 
-// ReadAll provides a mock function with given fields: _a0, _a1
-func (_m *MockListInterface) ReadAll(_a0 context.Context, _a1 domain.UserID) ([]domain.List, error) {
+// GetAll provides a mock function with given fields: _a0, _a1
+func (_m *MockListInterface) GetAll(_a0 context.Context, _a1 domain.UserID) ([]domain.List, error) {
 	ret := _m.Called(_a0, _a1)
 
 	if len(ret) == 0 {
-		panic("no return value specified for ReadAll")
+		panic("no return value specified for GetAll")
 	}
 
 	var r0 []domain.List
@@ -192,31 +192,31 @@ func (_m *MockListInterface) ReadAll(_a0 context.Context, _a1 domain.UserID) ([]
 	return r0, r1
 }
 
-// MockListInterface_ReadAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReadAll'
-type MockListInterface_ReadAll_Call struct {
+// MockListInterface_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockListInterface_GetAll_Call struct {
 	*mock.Call
 }
 
-// ReadAll is a helper method to define mock.On call
+// GetAll is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.UserID
-func (_e *MockListInterface_Expecter) ReadAll(_a0 interface{}, _a1 interface{}) *MockListInterface_ReadAll_Call {
-	return &MockListInterface_ReadAll_Call{Call: _e.mock.On("ReadAll", _a0, _a1)}
+func (_e *MockListInterface_Expecter) GetAll(_a0 interface{}, _a1 interface{}) *MockListInterface_GetAll_Call {
+	return &MockListInterface_GetAll_Call{Call: _e.mock.On("GetAll", _a0, _a1)}
 }
 
-func (_c *MockListInterface_ReadAll_Call) Run(run func(_a0 context.Context, _a1 domain.UserID)) *MockListInterface_ReadAll_Call {
+func (_c *MockListInterface_GetAll_Call) Run(run func(_a0 context.Context, _a1 domain.UserID)) *MockListInterface_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(domain.UserID))
 	})
 	return _c
 }
 
-func (_c *MockListInterface_ReadAll_Call) Return(_a0 []domain.List, _a1 error) *MockListInterface_ReadAll_Call {
+func (_c *MockListInterface_GetAll_Call) Return(_a0 []domain.List, _a1 error) *MockListInterface_GetAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockListInterface_ReadAll_Call) RunAndReturn(run func(context.Context, domain.UserID) ([]domain.List, error)) *MockListInterface_ReadAll_Call {
+func (_c *MockListInterface_GetAll_Call) RunAndReturn(run func(context.Context, domain.UserID) ([]domain.List, error)) *MockListInterface_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }

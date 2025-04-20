@@ -80,30 +80,6 @@ func (ctl *Tasks) UpdateTask(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
-/*func (ctl *Tasks) UpdateTaskStatus(c *gin.Context) {
-	curUser := getCurrentUser(c)
-
-	c.JSON(http.StatusOK, curUser)
-}
-
-func (ctl *Tasks) UpdateTaskPriority(c *gin.Context) {
-	curUser := getCurrentUser(c)
-
-	c.JSON(http.StatusOK, curUser)
-}
-
-func (ctl *Tasks) UpdateTaskName(c *gin.Context) {
-	curUser := getCurrentUser(c)
-
-	c.JSON(http.StatusOK, curUser)
-}
-
-func (ctl *Tasks) UpdateTaskDeadline(c *gin.Context) {
-	curUser := getCurrentUser(c)
-
-	c.JSON(http.StatusOK, curUser)
-}*/
-
 func (ctl *Tasks) DeleteTask(c *gin.Context) {
 	ctx, curUser := c.Request.Context(), getCurrentUser(c)
 
