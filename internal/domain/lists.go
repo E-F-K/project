@@ -10,11 +10,12 @@ var (
 )
 
 var (
-	ErrToDoServiceCreateList       = errors.Join(errToDoService, errors.New("create list failed"))
-	ErrToDoServiceDeleteList       = errors.Join(errToDoService, errors.New("delete list failed"))
-	ErrToDoServiceListAccessDenied = errors.Join(errToDoService, errors.New("access to list failed"))
-	ErrToDoServiceReadAllLits      = errors.Join(errToDoService, errors.New("read all lists failed"))
-	ErrToDoServiceUpdateList       = errors.Join(errToDoService, errors.New("update lists failed"))
+	errListService                 = errors.New("list service error")
+	ErrListServiceCreate           = errors.Join(errListService, errors.New("create failed"))
+	ErrToDoServiceDeleteList       = errors.Join(errListService, errors.New("delete list failed"))
+	ErrToDoServiceListAccessDenied = errors.Join(errListService, errors.New("access to list failed"))
+	ErrToDoServiceReadAllLits      = errors.Join(errListService, errors.New("read all lists failed"))
+	ErrToDoServiceUpdateList       = errors.Join(errListService, errors.New("update lists failed"))
 )
 
 type ListService struct {
@@ -46,7 +47,7 @@ func (s *ListService) Create(ctx context.Context, list List) error {
 		return s.listRepo.Create(ctx, connection, list)
 	})
 	if err != nil {
-		return errors.Join(ErrToDoServiceCreateList, err)
+		return errors.Join(ErrListServiceCreate, err)
 	}
 
 	return nil
@@ -67,12 +68,11 @@ func (s *ListService) GetAll(ctx context.Context, userID UserID) ([]List, error)
 	var lists []List
 	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
 		var getError error
-		lists, getError = s.listRepo.GetAllLists(ctx, connection, userID)
+		lists, getError = s.listRepo.ReadAll(ctx, connection, userID)
 		return getError
 	})
 	if err != nil {
-		// first argument?
-		return lists, errors.Join(ErrToDoServiceReadAllLits, err)
+		return nil, errors.Join(ErrToDoServiceReadAllLits, err)
 	}
 
 	return lists, nil
@@ -80,7 +80,6 @@ func (s *ListService) GetAll(ctx context.Context, userID UserID) ([]List, error)
 
 func (s *ListService) Update(ctx context.Context, list List) error {
 	err := s.provider.ExecuteTx(ctx, func(ctx context.Context, connection Connection) error {
-		// Мы присваиваем юзер ID текущему юзеру в listController
 		return s.listRepo.Update(ctx, connection, list)
 	})
 	if err != nil {

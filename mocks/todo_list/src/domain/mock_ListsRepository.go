@@ -119,12 +119,12 @@ func (_c *MockListsRepository_Delete_Call) RunAndReturn(run func(context.Context
 	return _c
 }
 
-// GetAllLists provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockListsRepository) GetAllLists(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID) ([]domain.List, error) {
+// ReadAll provides a mock function with given fields: _a0, _a1, _a2
+func (_m *MockListsRepository) ReadAll(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID) ([]domain.List, error) {
 	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetAllLists")
+		panic("no return value specified for ReadAll")
 	}
 
 	var r0 []domain.List
@@ -149,90 +149,32 @@ func (_m *MockListsRepository) GetAllLists(_a0 context.Context, _a1 domain.Conne
 	return r0, r1
 }
 
-// MockListsRepository_GetAllLists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllLists'
-type MockListsRepository_GetAllLists_Call struct {
+// MockListsRepository_ReadAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReadAll'
+type MockListsRepository_ReadAll_Call struct {
 	*mock.Call
 }
 
-// GetAllLists is a helper method to define mock.On call
+// ReadAll is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
 //   - _a2 domain.UserID
-func (_e *MockListsRepository_Expecter) GetAllLists(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockListsRepository_GetAllLists_Call {
-	return &MockListsRepository_GetAllLists_Call{Call: _e.mock.On("GetAllLists", _a0, _a1, _a2)}
+func (_e *MockListsRepository_Expecter) ReadAll(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockListsRepository_ReadAll_Call {
+	return &MockListsRepository_ReadAll_Call{Call: _e.mock.On("ReadAll", _a0, _a1, _a2)}
 }
 
-func (_c *MockListsRepository_GetAllLists_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID)) *MockListsRepository_GetAllLists_Call {
+func (_c *MockListsRepository_ReadAll_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID)) *MockListsRepository_ReadAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID))
 	})
 	return _c
 }
 
-func (_c *MockListsRepository_GetAllLists_Call) Return(_a0 []domain.List, _a1 error) *MockListsRepository_GetAllLists_Call {
+func (_c *MockListsRepository_ReadAll_Call) Return(_a0 []domain.List, _a1 error) *MockListsRepository_ReadAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockListsRepository_GetAllLists_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID) ([]domain.List, error)) *MockListsRepository_GetAllLists_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// Read provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockListsRepository) Read(_a0 context.Context, _a1 domain.Connection, _a2 domain.ListID) (domain.List, error) {
-	ret := _m.Called(_a0, _a1, _a2)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Read")
-	}
-
-	var r0 domain.List
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.ListID) (domain.List, error)); ok {
-		return rf(_a0, _a1, _a2)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.ListID) domain.List); ok {
-		r0 = rf(_a0, _a1, _a2)
-	} else {
-		r0 = ret.Get(0).(domain.List)
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, domain.ListID) error); ok {
-		r1 = rf(_a0, _a1, _a2)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockListsRepository_Read_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Read'
-type MockListsRepository_Read_Call struct {
-	*mock.Call
-}
-
-// Read is a helper method to define mock.On call
-//   - _a0 context.Context
-//   - _a1 domain.Connection
-//   - _a2 domain.ListID
-func (_e *MockListsRepository_Expecter) Read(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockListsRepository_Read_Call {
-	return &MockListsRepository_Read_Call{Call: _e.mock.On("Read", _a0, _a1, _a2)}
-}
-
-func (_c *MockListsRepository_Read_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.ListID)) *MockListsRepository_Read_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.ListID))
-	})
-	return _c
-}
-
-func (_c *MockListsRepository_Read_Call) Return(_a0 domain.List, _a1 error) *MockListsRepository_Read_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockListsRepository_Read_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.ListID) (domain.List, error)) *MockListsRepository_Read_Call {
+func (_c *MockListsRepository_ReadAll_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID) ([]domain.List, error)) *MockListsRepository_ReadAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
