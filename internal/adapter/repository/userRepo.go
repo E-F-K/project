@@ -17,7 +17,6 @@ var (
 	ErrUsersUpdate             = errors.Join(errUsers, errors.New("update failed"))
 	ErrUsersDelete             = errors.Join(errUsers, errors.New("delete failed"))
 	ErrUsersUpdateTokenByEmail = errors.Join(errUsers, errors.New("update token by email failed"))
-	ErrUsersGetAllLists        = errors.Join(errUsers, errors.New("get all lists failed"))
 	ErrUsersGetAllTasks        = errors.Join(errUsers, errors.New("get all tasks failed"))
 )
 

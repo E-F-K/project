@@ -22,17 +22,17 @@ func (_m *MockTasksRepository) EXPECT() *MockTasksRepository_Expecter {
 	return &MockTasksRepository_Expecter{mock: &_m.Mock}
 }
 
-// Create provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockTasksRepository) Create(_a0 context.Context, _a1 domain.Connection, _a2 domain.Task) error {
-	ret := _m.Called(_a0, _a1, _a2)
+// Create provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockTasksRepository) Create(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.Task) error {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.Task) error); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.Task) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -48,14 +48,15 @@ type MockTasksRepository_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.Task
-func (_e *MockTasksRepository_Expecter) Create(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTasksRepository_Create_Call {
-	return &MockTasksRepository_Create_Call{Call: _e.mock.On("Create", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 domain.Task
+func (_e *MockTasksRepository_Expecter) Create(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockTasksRepository_Create_Call {
+	return &MockTasksRepository_Create_Call{Call: _e.mock.On("Create", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockTasksRepository_Create_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.Task)) *MockTasksRepository_Create_Call {
+func (_c *MockTasksRepository_Create_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.Task)) *MockTasksRepository_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.Task))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].(domain.Task))
 	})
 	return _c
 }
@@ -65,7 +66,7 @@ func (_c *MockTasksRepository_Create_Call) Return(_a0 error) *MockTasksRepositor
 	return _c
 }
 
-func (_c *MockTasksRepository_Create_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.Task) error) *MockTasksRepository_Create_Call {
+func (_c *MockTasksRepository_Create_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, domain.Task) error) *MockTasksRepository_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }

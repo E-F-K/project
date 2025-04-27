@@ -13,10 +13,9 @@ type UsersRepository interface {
 
 type ListsRepository interface {
 	Create(context.Context, Connection, List) error
-	Read(context.Context, Connection, ListID) (List, error)
 	Update(context.Context, Connection, List) error
 	Delete(context.Context, Connection, UserID, ListID) error
-	GetAllLists(context.Context, Connection, UserID) ([]List, error)
+	ReadAll(context.Context, Connection, UserID) ([]List, error)
 }
 
 type TasksRepository interface {
