@@ -49,11 +49,11 @@ func (r Lists) Delete(ctx context.Context, connection domain.Connection, userID 
 	return nil
 }
 
-func (r Lists) Read(ctx context.Context, connection domain.Connection, listID domain.ListID) (domain.List, error) {
-	const query = `select id, user_id, name, updated_at from lists where id = $1`
+func (r Lists) Read(ctx context.Context, connection domain.Connection, userID domain.UserID, listID domain.ListID) (domain.List, error) {
+	const query = `select id, user_id, name, updated_at from lists where user_id = $1 and id = $2`
 
 	var list domain.List
-	if err := connection.GetContext(ctx, &list, query, listID); err != nil {
+	if err := connection.GetContext(ctx, &list, query, userID, listID); err != nil {
 		return list, errors.Join(ErrListsRead, err)
 	}
 
