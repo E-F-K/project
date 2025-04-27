@@ -30,7 +30,7 @@ func TestListsIntegration(t *testing.T) {
 		list.Name = "new list name"
 		require.NoError(t, repoList.Update(ctx, connection, list))
 
-		newList, err := repoList.Read(ctx, connection, list.ID)
+		newList, err := repoList.Read(ctx, connection, list.UserID, list.ID)
 		require.NoError(t, err)
 		require.Equal(t, list.Name, newList.Name)
 
@@ -43,7 +43,7 @@ func TestListsIntegration(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, len(allListsBeforeDelete)-1, len(allListsAfterDelete))
 
-		_, err = repoList.Read(ctx, connection, list.ID)
+		_, err = repoList.Read(ctx, connection, list.UserID, list.ID)
 		require.ErrorIs(t, err, sql.ErrNoRows)
 
 		return nil
@@ -96,11 +96,11 @@ func TestListsUnit(t *testing.T) {
 			name: "Read DB Error",
 			check: func(t *testing.T, repo *repository.Lists, connection *dbMocks.MockConnection) {
 				connection.EXPECT().
-					GetContext(mock.Anything, mock.Anything, mock.Anything, validEmptyList.ID).
+					GetContext(mock.Anything, mock.Anything, mock.Anything, validEmptyList.UserID, validEmptyList.ID).
 					Return(errors.New("some error")).
 					Once()
 
-				_, err := repo.Read(ctx, connection, validEmptyList.ID)
+				_, err := repo.Read(ctx, connection, validEmptyList.UserID, validEmptyList.ID)
 
 				require.ErrorIs(t, err, repository.ErrListsRead)
 				require.ErrorContains(t, err, "some error")
