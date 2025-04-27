@@ -34,10 +34,10 @@ values
 
 	_, err := connection.ExecContext(ctx, query, user.ID, user.Name, user.Email, user.PasswordHash, user.Token)
 	if err != nil {
-		err = errors.Join(ErrUsersCreate, err)
+		return errors.Join(ErrUsersCreate, err)
 	}
 
-	return err
+	return nil
 }
 
 func (r Users) Delete(ctx context.Context, connection domain.Connection, userID domain.UserID) error {
@@ -45,10 +45,10 @@ func (r Users) Delete(ctx context.Context, connection domain.Connection, userID 
 
 	_, err := connection.ExecContext(ctx, query, userID)
 	if err != nil {
-		err = errors.Join(ErrUsersDelete, err)
+		return errors.Join(ErrUsersDelete, err)
 	}
 
-	return err
+	return nil
 }
 
 func (r Users) ReadByToken(ctx context.Context, connection domain.Connection, token string) (domain.User, error) {
@@ -57,10 +57,10 @@ func (r Users) ReadByToken(ctx context.Context, connection domain.Connection, to
 	var user domain.User
 	err := connection.GetContext(ctx, &user, query, token)
 	if err != nil {
-		err = errors.Join(ErrUsersRead, err)
+		return user, errors.Join(ErrUsersRead, err)
 	}
 
-	return user, err
+	return user, nil
 }
 
 func (r Users) ReadByEmail(ctx context.Context, connection domain.Connection, email string) (domain.User, error) {
@@ -69,10 +69,10 @@ func (r Users) ReadByEmail(ctx context.Context, connection domain.Connection, em
 	var user domain.User
 	err := connection.GetContext(ctx, &user, query, email)
 	if err != nil {
-		err = errors.Join(ErrUsersRead, err)
+		return user, errors.Join(ErrUsersRead, err)
 	}
 
-	return user, err
+	return user, nil
 }
 
 func (r Users) Update(ctx context.Context, connection domain.Connection, user domain.User) error {
@@ -80,18 +80,18 @@ func (r Users) Update(ctx context.Context, connection domain.Connection, user do
 
 	_, err := connection.ExecContext(ctx, query, user.ID, user.Name, user.Email, user.PasswordHash, user.Token)
 	if err != nil {
-		err = errors.Join(ErrUsersUpdate, err)
+		return errors.Join(ErrUsersUpdate, err)
 	}
 
-	return err
+	return nil
 }
 
 func (r Users) UpdateTokenByEmail(ctx context.Context, connection domain.Connection, email string, token string) error {
 	const query = `update users set token = $2 where email = $1`
 	updated, err := connection.ExecContext(ctx, query, email, token)
 	if err != nil || updated <= 0 {
-		err = errors.Join(ErrUsersUpdateTokenByEmail, err)
+		return errors.Join(ErrUsersUpdateTokenByEmail, err)
 	}
 
-	return err
+	return nil
 }

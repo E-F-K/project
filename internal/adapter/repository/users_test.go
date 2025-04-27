@@ -28,17 +28,17 @@ func TestUsersIntegration(t *testing.T) {
 		user.Name = "new user name"
 		require.NoError(t, repo.Update(ctx, connection, user))
 
-		newUser1, err := repo.ReadByToken(ctx, connection, user.Token)
+		updatedUser, err := repo.ReadByToken(ctx, connection, user.Token)
 		require.NoError(t, err)
-		require.Equal(t, user.Name, newUser1.Name)
+		require.Equal(t, user.Name, updatedUser.Name)
 
-		newUser2, err := repo.ReadByEmail(ctx, connection, user.Email)
+		updatedUser, err = repo.ReadByEmail(ctx, connection, user.Email)
 		require.NoError(t, err)
-		require.Equal(t, user.Name, newUser2.Name)
+		require.Equal(t, user.Name, updatedUser.Name)
 
 		newToken := "some new token"
 		require.NoError(t, repo.UpdateTokenByEmail(ctx, connection, user.Email, newToken))
-		updatedUser, err := repo.ReadByEmail(ctx, connection, user.Email)
+		updatedUser, err = repo.ReadByEmail(ctx, connection, user.Email)
 		require.NoError(t, err)
 		require.Equal(t, newToken, updatedUser.Token)
 
