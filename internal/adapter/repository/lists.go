@@ -25,10 +25,9 @@ func NewLists() *Lists {
 }
 
 func (r Lists) Create(ctx context.Context, connection domain.Connection, list domain.List) error {
-	const query = `
-insert into lists
+	const query = `insert into lists
     (id, user_id, name, updated_at)
-values
+	values
     ($1, $2, $3, default)`
 
 	_, err := connection.ExecContext(ctx, query, list.ID, list.UserID, list.Name)

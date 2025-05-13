@@ -120,9 +120,9 @@ func (_c *MockTasksRepository_Delete_Call) RunAndReturn(run func(context.Context
 	return _c
 }
 
-// GetAllTasks provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockTasksRepository) GetAllTasks(_a0 context.Context, _a1 domain.Connection, _a2 []domain.ListID) ([]domain.Task, error) {
-	ret := _m.Called(_a0, _a1, _a2)
+// GetAllTasks provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockTasksRepository) GetAllTasks(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 []domain.ListID) ([]domain.Task, error) {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAllTasks")
@@ -130,19 +130,19 @@ func (_m *MockTasksRepository) GetAllTasks(_a0 context.Context, _a1 domain.Conne
 
 	var r0 []domain.Task
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, []domain.ListID) ([]domain.Task, error)); ok {
-		return rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, []domain.ListID) ([]domain.Task, error)); ok {
+		return rf(_a0, _a1, _a2, _a3)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, []domain.ListID) []domain.Task); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, []domain.ListID) []domain.Task); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]domain.Task)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, []domain.ListID) error); ok {
-		r1 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, domain.UserID, []domain.ListID) error); ok {
+		r1 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -158,14 +158,15 @@ type MockTasksRepository_GetAllTasks_Call struct {
 // GetAllTasks is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 []domain.ListID
-func (_e *MockTasksRepository_Expecter) GetAllTasks(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTasksRepository_GetAllTasks_Call {
-	return &MockTasksRepository_GetAllTasks_Call{Call: _e.mock.On("GetAllTasks", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 []domain.ListID
+func (_e *MockTasksRepository_Expecter) GetAllTasks(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockTasksRepository_GetAllTasks_Call {
+	return &MockTasksRepository_GetAllTasks_Call{Call: _e.mock.On("GetAllTasks", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockTasksRepository_GetAllTasks_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 []domain.ListID)) *MockTasksRepository_GetAllTasks_Call {
+func (_c *MockTasksRepository_GetAllTasks_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 []domain.ListID)) *MockTasksRepository_GetAllTasks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].([]domain.ListID))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].([]domain.ListID))
 	})
 	return _c
 }
@@ -175,14 +176,14 @@ func (_c *MockTasksRepository_GetAllTasks_Call) Return(_a0 []domain.Task, _a1 er
 	return _c
 }
 
-func (_c *MockTasksRepository_GetAllTasks_Call) RunAndReturn(run func(context.Context, domain.Connection, []domain.ListID) ([]domain.Task, error)) *MockTasksRepository_GetAllTasks_Call {
+func (_c *MockTasksRepository_GetAllTasks_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, []domain.ListID) ([]domain.Task, error)) *MockTasksRepository_GetAllTasks_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Read provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockTasksRepository) Read(_a0 context.Context, _a1 domain.Connection, _a2 domain.TaskID) (domain.Task, error) {
-	ret := _m.Called(_a0, _a1, _a2)
+// Read provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *MockTasksRepository) Read(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.TaskID) (domain.Task, error) {
+	ret := _m.Called(_a0, _a1, _a2, _a3)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Read")
@@ -190,17 +191,17 @@ func (_m *MockTasksRepository) Read(_a0 context.Context, _a1 domain.Connection, 
 
 	var r0 domain.Task
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.TaskID) (domain.Task, error)); ok {
-		return rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.TaskID) (domain.Task, error)); ok {
+		return rf(_a0, _a1, _a2, _a3)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.TaskID) domain.Task); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, domain.Connection, domain.UserID, domain.TaskID) domain.Task); ok {
+		r0 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r0 = ret.Get(0).(domain.Task)
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, domain.TaskID) error); ok {
-		r1 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(1).(func(context.Context, domain.Connection, domain.UserID, domain.TaskID) error); ok {
+		r1 = rf(_a0, _a1, _a2, _a3)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -216,14 +217,15 @@ type MockTasksRepository_Read_Call struct {
 // Read is a helper method to define mock.On call
 //   - _a0 context.Context
 //   - _a1 domain.Connection
-//   - _a2 domain.TaskID
-func (_e *MockTasksRepository_Expecter) Read(_a0 interface{}, _a1 interface{}, _a2 interface{}) *MockTasksRepository_Read_Call {
-	return &MockTasksRepository_Read_Call{Call: _e.mock.On("Read", _a0, _a1, _a2)}
+//   - _a2 domain.UserID
+//   - _a3 domain.TaskID
+func (_e *MockTasksRepository_Expecter) Read(_a0 interface{}, _a1 interface{}, _a2 interface{}, _a3 interface{}) *MockTasksRepository_Read_Call {
+	return &MockTasksRepository_Read_Call{Call: _e.mock.On("Read", _a0, _a1, _a2, _a3)}
 }
 
-func (_c *MockTasksRepository_Read_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.TaskID)) *MockTasksRepository_Read_Call {
+func (_c *MockTasksRepository_Read_Call) Run(run func(_a0 context.Context, _a1 domain.Connection, _a2 domain.UserID, _a3 domain.TaskID)) *MockTasksRepository_Read_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.TaskID))
+		run(args[0].(context.Context), args[1].(domain.Connection), args[2].(domain.UserID), args[3].(domain.TaskID))
 	})
 	return _c
 }
@@ -233,7 +235,7 @@ func (_c *MockTasksRepository_Read_Call) Return(_a0 domain.Task, _a1 error) *Moc
 	return _c
 }
 
-func (_c *MockTasksRepository_Read_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.TaskID) (domain.Task, error)) *MockTasksRepository_Read_Call {
+func (_c *MockTasksRepository_Read_Call) RunAndReturn(run func(context.Context, domain.Connection, domain.UserID, domain.TaskID) (domain.Task, error)) *MockTasksRepository_Read_Call {
 	_c.Call.Return(run)
 	return _c
 }
