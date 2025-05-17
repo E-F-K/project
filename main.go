@@ -67,7 +67,7 @@ func main() {
 }
 
 func createControllers() (*controller.Users, *controller.Lists, *controller.Tasks, gin.HandlerFunc, error) {
-	pool, err := pgxpool.New(context.Background(), domain.ConnectionString)
+	pool, err := pgxpool.New(context.Background(), os.Getenv("DB_CONNECTION"))
 	if err != nil {
 		return nil, nil, nil, nil, errors.Join(errors.New("create database pool failed"), err)
 	}
